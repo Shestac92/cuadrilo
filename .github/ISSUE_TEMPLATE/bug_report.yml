@@ -1,0 +1,55 @@
+name: Bug report
+description: Something does not work as it should
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for the report. Please do **not** paste passwords, `.env` files, databases or students' data.
+        A security problem is not an issue: see SECURITY.md.
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What did you do, what did you expect, and what happened instead?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Sign in as a teacher
+        2. Open a lesson ...
+        3. ...
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: The release (for example v1.0.0) or the commit.
+    validations:
+      required: true
+  - type: dropdown
+    id: how
+    attributes:
+      label: How do you run it?
+      options:
+        - On a server (install guide)
+        - Locally (npm run dev)
+        - Other
+    validations:
+      required: true
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and device
+      description: If the problem is on screen.
+      placeholder: Safari 18 on iPhone, Chrome on Windows ...
+  - type: textarea
+    id: logs
+    attributes:
+      label: Errors
+      description: From the browser console or the server log.
+      render: text

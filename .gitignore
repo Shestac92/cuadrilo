@@ -1,0 +1,19 @@
+node_modules/
+dist/
+*.tsbuildinfo
+
+# Settings of this installation (copy .env.example).
+.env*
+!.env.example
+.DS_Store
+
+# Per-installation data: lessons.db, media/ (lesson images and
+# audio). Only the empty folders are in git.
+data/*
+!data/.gitkeep
+!data/media/
+data/media/*
+!data/media/.gitkeep
+
+# Personal agent instructions.
+.claude.local.md

@@ -1,0 +1,27 @@
+name: Dependency audit
+
+on:
+  push:
+    branches: [main]
+    paths: [package-lock.json, '**/package.json', .github/workflows/audit.yml]
+  pull_request:
+    paths: [package-lock.json, '**/package.json', .github/workflows/audit.yml]
+  # New advisories appear without any change in the repository: look again every Monday.
+  schedule:
+    - cron: '17 6 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    name: npm audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+      # Reads package-lock.json, installs nothing. Fails on a known vulnerability of high severity or worse.
+      - run: npm audit --audit-level=high

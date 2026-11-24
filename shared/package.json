@@ -1,0 +1,46 @@
+{
+  "name": "@cuadrilo/shared",
+  "version": "0.1.0",
+  "private": true,
+  "description": "API contract and lesson format shared by the server and the client (TypeScript sources, no build step)",
+  "homepage": "https://github.com/Shestac92/cuadrilo#readme",
+  "bugs": {
+    "url": "https://github.com/Shestac92/cuadrilo/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Shestac92/cuadrilo.git",
+    "directory": "shared"
+  },
+  "author": "Aleksandr Shestakov",
+  "license": "MIT",
+  "exports": {
+    "./api": "./src/api.ts",
+    "./board": "./src/board.ts",
+    "./comments": "./src/comments.ts",
+    "./hotspots": "./src/hotspots.ts",
+    "./dictation": "./src/dictation.ts",
+    "./genially": "./src/genially.ts",
+    "./highlights": "./src/highlights.ts",
+    "./lesson": "./src/lesson.ts",
+    "./platform": "./src/platform.ts",
+    "./lessonSchema": "./src/lessonSchema.ts",
+    "./textColors": "./src/textColors.ts",
+    "./themes": "./src/themes.ts",
+    "./i18n": "./src/i18n/index.ts",
+    "./i18n/es": "./src/i18n/es.ts",
+    "./i18n/en": "./src/i18n/en.ts",
+    "./wheel": "./src/wheel.ts",
+    "./wordsearch": "./src/wordsearch.ts",
+    "./youtube": "./src/youtube.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "typescript": "5.9.3"
+  }
+}

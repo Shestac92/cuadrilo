@@ -1,0 +1,18 @@
+# Caddy for the platform: HTTPS (a Let's Encrypt certificate, got and renewed by Caddy itself),
+# the built client as static files, the API and the rest to the Node server.
+DOMAIN {
+	encode zstd gzip
+
+	# Everything the Node server answers (the Host header is passed on as it is: the origin check needs it).
+	@backend path /api/* /socket.io/* /media/* /mcp /oauth/authorize /oauth/token /oauth/register /oauth/revoke /.well-known/*
+	handle @backend {
+		reverse_proxy 127.0.0.1:8080
+	}
+
+	# The client: files of the build, index.html for the routes of the app.
+	handle {
+		root * /opt/cuadrilo/client/dist
+		try_files {path} /index.html
+		file_server
+	}
+}

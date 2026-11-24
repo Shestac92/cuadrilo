@@ -1,0 +1,229 @@
+/*
+ * The board (pizarra) panel. Colours come from the theme tokens in styles.css.
+ */
+
+/* The card is the anchor for the sheet's own controls. */
+.board {
+  position: relative;
+  /* Lifted like every card (styles.css: --card-lift; the border is kept transparent so the size is the same as with one). */
+  border: 1px solid transparent;
+  box-shadow: var(--card-lift);
+}
+
+/* On the dashboard the board sits in an accordion card, so it does not glow on its own. */
+.dashboard-board .board {
+  box-shadow: none;
+  border: 1px solid var(--border);
+}
+
+:root[data-mantine-color-scheme="dark"] .board {
+  background-color: var(--card-surface);
+}
+
+/* Lines like notes in a notebook: one per row, a thin rule between them. */
+.board-lines {
+  height: clamp(180px, 36vh, 400px);
+  overflow-y: auto;
+  display: grid;
+  align-content: start;
+}
+
+.board-lines.tall {
+  height: calc(100vh - 280px);
+  min-height: 240px;
+}
+
+/*
+ * In the pinned side column (styles.css) the board has a height of its own,
+ * between 220 and 560px: the most when the screen allows, less when the
+ * column (one screen tall at most) is short; it never follows the number of lines.
+ * The students' card above is capped too (styles.css), so it cannot push the board out.
+ */
+.player-layout.docked > .player-side > .board,
+.player-layout.docked > .player-side > .dock-flat > .board {
+  flex: 0 1 560px;
+  min-height: 220px;
+  max-height: 560px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.player-side .board-feed {
+  flex: 1 1 auto;
+  min-height: 100px;
+  display: flex;
+  flex-direction: column;
+}
+
+.player-side .board-lines {
+  flex: 1 1 auto;
+  height: auto;
+  min-height: 100px;
+}
+
+.board-lines p {
+  margin: 0;
+  padding: 6px 0;
+  line-height: 1.5;
+  /* Long words and links must not widen the panel. */
+  overflow-wrap: anywhere;
+}
+
+.board-lines p + p {
+  border-top: 1px solid var(--border);
+}
+
+/* The teacher's 🗑: shown on hover or focus; always on a touch screen (no hover). */
+.board-lines p.deletable {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.board-lines p > span {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.board-delete {
+  flex: none;
+  margin-top: 3px;
+  opacity: 0;
+}
+
+.board-lines p:hover .board-delete,
+.board-delete:focus-visible {
+  opacity: 1;
+}
+
+@media (hover: none) {
+  .board-delete {
+    opacity: 1;
+  }
+}
+
+/* The platform's welcome line: a note, not somebody's writing. */
+.board-lines p.board-welcome {
+  color: var(--muted);
+  font-style: italic;
+}
+
+.board-lines.tall p {
+  padding: 10px 0;
+  font-size: var(--mantine-font-size-lg);
+}
+
+/* A line that has just been written by someone else: lit, then fades into the usual colour. */
+.board-lines p.fresh {
+  animation: board-fresh 4s ease-out;
+}
+
+@keyframes board-fresh {
+  0%,
+  35% {
+    background: var(--mantine-primary-color-light);
+    box-shadow: inset 3px 0 0 var(--mantine-primary-color-filled);
+  }
+  100% {
+    background: transparent;
+    box-shadow: inset 3px 0 0 transparent;
+  }
+}
+
+/*
+ * Bottom sheet (a phone). These follow the column's rule above, so each selector is at least as
+ * specific: otherwise the column's height would win.
+ */
+.player-layout.docked > .player-side.sheet .sheet-panel > .board {
+  /* The toggle row above is the card's top padding. */
+  /* biome-ignore lint/complexity/noImportantStyles: Paper's `p` is an inline style */
+  padding-top: 0 !important;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.player-layout.docked > .player-side.sheet-open .sheet-panel > .board {
+  /* Basis 0, so the card takes the room left in the panel and the lines scroll inside it. */
+  flex: 1 1 0px;
+  min-height: 0;
+  max-height: none;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.player-layout.docked > .player-side.sheet-collapsed .sheet-panel > .board {
+  flex: none;
+  min-height: 0;
+  max-height: none;
+  overflow: visible;
+  background: transparent;
+}
+
+.player-layout.docked > .player-side.sheet .sheet-panel .board-feed,
+.player-layout.docked > .player-side.sheet .sheet-panel .board-lines {
+  flex: 1 1 0px;
+  min-height: 0;
+  height: auto;
+}
+
+.player-layout.docked > .player-side.sheet .sheet-panel .board-lines {
+  overflow-y: auto;
+  /* A trackpad at the end of the feed stays in the feed. It does not keep going into the lesson. */
+  overscroll-behavior: contain;
+}
+
+/* Collapsed phone sheet: one line, the lesson stays in view. */
+.player-layout.docked > .player-side.sheet .board-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.player-layout.docked > .player-side.sheet .board-bar-main {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  border: 0;
+  background: none;
+  padding: 2px 0;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+.player-layout.docked > .player-side.sheet .board-bar-title {
+  flex: none;
+  font-weight: 700;
+  font-size: 0.875rem;
+}
+
+.player-layout.docked > .player-side.sheet .board-bar-text {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--muted);
+  font-size: 0.8125rem;
+}
+
+.player-layout.docked > .player-side.sheet .board-new {
+  flex: none;
+  border-radius: 999px;
+  padding: 1px 8px;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  line-height: 1.5;
+  color: var(--mantine-color-green-light-color);
+  background: var(--mantine-color-green-light);
+}
+
+.player-layout.docked > .player-side.sheet .board-bar-text.fresh {
+  animation: board-fresh 4s ease-out;
+}

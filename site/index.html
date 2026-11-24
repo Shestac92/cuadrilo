@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cuadrilo — interactive language lessons on your own server</title>
+  <meta name="description" content="Cuadrilo is a free, open-source, self-hosted platform for interactive language lessons: build lessons from 21 kinds of blocks, teach live, give homework, and let an AI assistant do the typing.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Cuadrilo — interactive language lessons on your own server">
+  <meta property="og:description" content="Open source, self-hosted, private. A lesson editor with 21 kinds of blocks, live classes, homework and an MCP server for AI assistants.">
+  <meta property="og:image" content="https://shestac92.github.io/cuadrilo/images/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Cuadrilo: the teacher's live class page with an exercise, the students online and a shared board">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg?v=2">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="top">
+    <div class="wrap top-inner">
+      <a class="brand" href="#top"><img src="favicon.svg" alt="" width="28" height="28">Cuadrilo</a>
+      <nav class="menu" aria-label="Main">
+        <a class="hide-sm" href="#why">Why</a>
+        <a class="hide-sm" href="#blocks">Blocks</a>
+        <a class="hide-sm" href="#try">Try it</a>
+        <a class="hide-sm" href="#ai">AI</a>
+        <a href="#install">Install</a>
+        <a class="hide-sm" href="#help">Help</a>
+        <a class="hide-sm" href="#author">Author</a>
+        <a class="hide-sm" href="#kudos">Kudos</a>
+        <a class="btn" href="https://github.com/Shestac92/cuadrilo">GitHub</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="wrap hero-inner">
+        <div>
+          <p class="eyebrow">Free · open source · self-hosted</p>
+          <h1>Lessons your students can <em>do</em>, not only read.</h1>
+        </div>
+        <p class="lead">Build a lesson from blocks, teach it live, give homework and watch the answers arrive. Free for teachers and students, no plans and no pricing. It runs on your own server.</p>
+        <div class="actions">
+          <a class="btn primary" href="https://github.com/Shestac92/cuadrilo">View on GitHub</a>
+          <a class="btn" href="#install">How to install it</a>
+        </div>
+        <img class="shot-img" src="images/live-class.webp" alt="The teacher's live class page: a sort exercise with the student's answers marked green and red, the students online and a shared board" width="2000" height="929">
+      </div>
+    </section>
+
+    <section id="why" class="soft">
+      <div class="wrap">
+        <div class="head">
+          <p class="eyebrow">Why it exists</p>
+          <h2>Free, fast and yours</h2>
+          <p class="lead">Learning languages should be open to everyone, and the basic tools of a teacher should not need a subscription. So Cuadrilo is free: no plans, no tiers, no paid features.</p>
+          
+        </div>
+        <div class="grid three">
+          <div class="card"><h3>Fast and light</h3><p>Lessons open and answers arrive at once. Few dependencies, nothing to wait for.</p></div>
+          <div class="card"><h3>Made for the live lesson</h3><p>Show a chapter, spin a wheel of questions, write on a shared board, set homework.</p></div>
+          <div class="card"><h3>Yours, not rented</h3><p>No ads, no analytics, no personal data: a login and a password per student. Everything is one folder you can copy.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="features">
+      <div class="wrap">
+        <div class="head">
+          <p class="eyebrow">What you get</p>
+          <h2>Everything a small class needs</h2>
+        </div>
+        <div class="grid three">
+          <div class="card"><h3>A visual lesson editor</h3><p>Chapters, exercises, a student preview, access per lesson and per student.</p></div>
+          <div class="card"><h3>Live classes, one-to-one or in groups</h3><p>Answers in real time, a wheel for speaking practice, a shared board. Teach a whole group or a single student.</p></div>
+          <div class="card"><h3>Homework and feedback</h3><p>Any exercise becomes homework in one click. Comments under any answer.</p></div>
+          <div class="card"><h3>A translator in every lesson</h3><p>Click a word, see translations from an offline dictionary, save it to a vocabulary.</p></div>
+          <div class="card"><h3>Your brand</h3><p>Your name, icon and colours. Interface in Spanish or English.</p></div>
+          <div class="card"><h3>AI assistants built in</h3><p>Claude or ChatGPT create and edit lessons through an MCP server.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="blocks" class="soft">
+      <div class="wrap">
+        <div class="head">
+          <p class="eyebrow">The building blocks</p>
+          <h2>21 kinds of blocks</h2>
+          
+        </div>
+        <img class="shot-img narrow" src="images/blocks.webp" alt="Some of the exercise blocks as a student sees them: order the words, match pairs, drag words into gaps, an audio player" width="1738" height="2078">
+                <div class="blocks" id="blocklist">
+        <div class="block"><code>text</code><p>Markdown text, tables and coloured words</p></div>
+        <div class="block"><code>image</code><p>A picture with a caption and a size</p></div>
+        <div class="block"><code>compare</code><p>Two pictures with a before/after slider</p></div>
+        <div class="block"><code>audio</code><p>An audio file, with a slow mode</p></div>
+        <div class="block"><code>video</code><p>A YouTube video with a start time</p></div>
+        <div class="block"><code>genially</code><p>An embedded Genially</p></div>
+        <div class="block"><code>wheel</code><p>A wheel of fortune for speaking practice</p></div>
+        <div class="block"><code>essay</code><p>A free written answer</p></div>
+        <div class="block"><code>gaps</code><p>Type the missing words</p></div>
+        <div class="block"><code>dropdown-gaps</code><p>Pick the missing words from lists</p></div>
+        <div class="block"><code>drag-gaps</code><p>Drag words from a bank into the gaps</p></div>
+        <div class="block"><code>build-word</code><p>Build words from shuffled letters</p></div>
+        <div class="block"><code>match</code><p>Join pairs</p></div>
+        <div class="block"><code>sort</code><p>Drag words into groups</p></div>
+        <div class="block"><code>order</code><p>Put the words of a sentence in order</p></div>
+        <div class="block"><code>sequence</code><p>Put sentences or dialogue lines in order</p></div>
+        <div class="block"><code>choice</code><p>A test with one or several right options</p></div>
+        <div class="block"><code>true-false</code><p>Mark statements true or false</p></div>
+        <div class="block"><code>dictation</code><p>Listen to a sentence and type it</p></div>
+        <div class="block"><code>wordsearch</code><p>Find the words in a letter grid</p></div>
+        <div class="block"><code>hotspots</code><p>Click the right zones on a picture</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="try">
+      <div class="wrap">
+        <div class="head">
+          <p class="eyebrow">Try it</p>
+          <h2>This is how a student feels it</h2>
+          <p class="lead">Every answer is checked at once: right turns green, wrong turns red.</p>
+        </div>
+        <video class="shot-img demo" autoplay muted loop playsinline disablepictureinpicture preload="metadata" poster="images/demo-poster.webp" width="1280" height="1128" aria-label="The teacher's class page above and the student's screen below: the teacher sends the student into the class and shows an exercise, the student answers and the answers turn green or red on the teacher's screen at once, a word is dragged into a gap, and the teacher sets an exercise as homework.">
+          <source src="images/demo.mp4" type="video/mp4">
+        </video>
+        <div class="demo">
+          <div class="card">
+            <h3>dropdown-gaps <small>Pick the right word in each gap</small></h3>
+            <p class="sentence">Mi hermano tiene <select class="gap" data-answer="un" aria-label="Choose the word"><option value="">…</option><option value="un">un</option><option value="una">una</option></select> coche y <select class="gap" data-answer="una" aria-label="Choose the word"><option value="">…</option><option value="un">un</option><option value="una">una</option></select> moto.</p>
+            <p class="hint">My brother has a car and a motorbike.</p>
+            <p class="status" id="gaps-status" aria-live="polite"></p>
+          </div>
+          <div class="card">
+            <h3>choice <small>Pick one answer</small></h3>
+            <p>En España en verano hace…</p>
+            <div class="opts" id="choice">
+              <button class="opt" type="button" data-correct="false">mucho frío</button>
+              <button class="opt" type="button" data-correct="true">calor</button>
+              <button class="opt" type="button" data-correct="false">viento</button>
+            </div>
+            <p class="status" id="choice-status" aria-live="polite"></p>
+          </div>
+        </div>
+        
+      </div>
+    </section>
+
+    <section id="ai" class="soft">
+      <div class="wrap">
+        <div class="grid two" style="align-items:center;gap:36px">
+          <div class="head" style="margin:0">
+            <p class="eyebrow">AI assistants</p>
+            <h2>Let the assistant do the typing</h2>
+            <p class="lead">Claude or ChatGPT can turn a worksheet or an idea into a finished lesson through the built-in MCP server. You check it.</p>
+            <p class="lead">It sees your lessons and media only, never your students or their answers.</p>
+            <p class="lead"><strong>To connect:</strong> copy the address from <em>Asistentes IA</em> and add it as a custom connector in Claude or ChatGPT. <a href="https://github.com/Shestac92/cuadrilo#connect-an-ai-assistant">Step by step</a>.</p>
+          </div>
+          <div>
+            <div class="chat">
+              <div class="bubble you">Turn this worksheet about “un / una” into a lesson with a rule and three exercises.</div>
+              <div class="bubble ai">Done. I created the lesson with:
+                <ul><li>a text block with the rule and a table,</li><li>a gaps exercise,</li><li>a match exercise,</li><li>a short choice test.</li></ul>
+                Here is the editor link; the lesson is closed to students until you open it.</div>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="install">
+      <div class="wrap">
+        <div class="head">
+          <p class="eyebrow">Get started</p>
+          <h2>Run it on your computer, or on a small server</h2>
+          <p class="lead">Free, MIT license. Needs Node.js 22.13+.</p>
+        </div>
+        <ol class="steps">
+          <li>
+            <h3>Try it on your computer</h3>
+<pre><code>git clone https://github.com/Shestac92/cuadrilo.git
+cd cuadrilo
+npm install
+npm run dev
+npm run create-teacher -w server -- teacher</code></pre>
+            <p class="hint">Then open <code>http://localhost:5173</code> and sign in as the teacher.</p>
+          </li>
+          <li>
+            <h3>Put it on your own server</h3>
+            <p>A step-by-step guide for a VPS: domain, HTTPS, backups, updates. No sysadmin skills needed.</p>
+            <p><a class="btn" href="https://github.com/Shestac92/cuadrilo/blob/main/deploy/INSTALL.md">Read the install guide</a></p>
+          </li>
+          <li>
+            <h3>Read, change, contribute</h3>
+            <p>Documentation for every part; contributions welcome.</p>
+            <p><a class="btn" href="https://github.com/Shestac92/cuadrilo/tree/main/docs">Documentation</a> <a class="btn" href="https://github.com/Shestac92/cuadrilo/blob/main/CONTRIBUTING.md">Contributing</a></p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section id="help" class="soft">
+      <div class="wrap">
+        <div class="head">
+          <p class="eyebrow">Help wanted</p>
+          <h2>Where you can help most</h2>
+          <p class="lead">Cuadrilo is built by one person. These are the places where help matters most.</p>
+        </div>
+        <div class="grid two">
+          <div class="card"><h3>Mobile browsers</h3><p>Adapt the interface to phones and tablets and test it in iOS Safari and Android Chrome.</p></div>
+          <div class="card"><h3>License-free dictionaries</h3><p>Offline dictionaries for more language pairs under permissive or public-domain licenses.</p></div>
+          <div class="card"><h3>Privacy and the law</h3><p>Review the privacy documents and what teachers need to meet data-protection rules in the EU, the UK, the US and elsewhere.</p></div>
+          <div class="card"><h3>Testing</h3><p>Try Cuadrilo on different platforms and browsers and report the bugs you find.</p></div>
+          <div class="card"><h3>A demo server</h3><p>A small VPS and a domain for a public demo. It needs few resources but costs money: a sponsor or a host would help.</p></div>
+        </div>
+        <p class="hint" style="margin-top:14px">Want to help? <a href="https://github.com/Shestac92/cuadrilo/issues">Open an issue</a> or write to <a href="mailto:cuadrilo@duck.com">cuadrilo@duck.com</a>.</p>
+      </div>
+    </section>
+
+    <section id="author">
+      <div class="wrap">
+        <div class="head">
+          <p class="eyebrow">Contact</p>
+          <h2>Author</h2>
+        </div>
+        <div>
+          <h3>Aleksandr Shestakov</h3><p>Author of Cuadrilo.</p><p><a href="mailto:cuadrilo@duck.com">cuadrilo@duck.com</a> · <a href="https://www.linkedin.com/in/aleksandr-shestakov-58778985/">LinkedIn</a></p>
+        </div>
+        <!-- Later: a count of confirmed installations and a section with teachers' reviews. -->
+      </div>
+    </section>
+
+    <section id="kudos" class="soft">
+      <div class="wrap">
+        <div class="head">
+          <p class="eyebrow">Kudos</p>
+          <h2>Thank you</h2>
+          <p class="lead">Cuadrilo would not be what it is without the people who tried it, broke it and told me how to make it better.</p>
+        </div>
+        <div class="grid three">
+          <div class="card"><h3>A Spanish teacher and the students</h3><p>For using the first versions in real lessons, for testing every new block and for ideas that became features.</p></div>
+          <div class="card"><h3>Friends</h3><p>For testing on their own phones and computers, finding bugs I did not see and not being polite about them.</p></div>
+          <div class="card"><h3>Colleagues</h3><p>For advice and good ideas, and for the questions that made the project simpler.</p></div>
+        </div>
+        <!-- Names go here only with the person's consent. -->
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap">
+        <div class="head" style="margin:0">
+          <p class="eyebrow">Support</p>
+          <h2>Free, and it stays free</h2>
+          <p class="lead">If Cuadrilo helps you, a coffee helps its development.</p>
+          <div class="actions" style="margin-top:8px"><a class="btn primary" href="https://buymeacoffee.com/shestac92">Buy me a coffee</a> <a class="btn" href="https://github.com/Shestac92/cuadrilo">Star it on GitHub</a></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap foot-inner">
+      <span>Cuadrilo · MIT License · Dictionaries from Wiktionary, CC BY-SA 4.0</span>
+      <nav aria-label="Footer">
+        <a href="https://github.com/Shestac92/cuadrilo">GitHub</a>
+        <a href="https://github.com/Shestac92/cuadrilo/blob/main/docs/why.md">Why Cuadrilo</a>
+        <a href="https://github.com/Shestac92/cuadrilo/blob/main/CHANGELOG.md">Changelog</a>
+        <a href="https://github.com/Shestac92/cuadrilo/blob/main/SECURITY.md">Security</a>
+      </nav>
+    </div>
+  </footer>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>Cuadrilo</title>
+  </head>
+  <body>
+    <div id="root"><noscript>__NOSCRIPT_MESSAGE__</noscript></div>
+    <!--
+      Plain old JavaScript on purpose: it must run in a browser that cannot run the app below. A browser too old
+      for the app's code fails to even parse it and leaves a white page; if nothing has appeared after a few
+      seconds (or the script reports a syntax error) this tells the person why. The app replaces it when it starts.
+    -->
+    <script>
+      // biome-ignore lint/complexity/useArrowFunction: this script must stay old JavaScript (no arrows).
+      (function () {
+        var message = __BROWSER_MESSAGE__;
+        var root = document.getElementById('root');
+        var shown = false;
+        function show() {
+          // biome-ignore lint/complexity/useOptionalChain: this script must stay old JavaScript (no `?.`).
+          var first = root && root.firstElementChild;
+          if (shown || !root || (first && first.tagName !== 'NOSCRIPT')) return;
+          shown = true;
+          var box = document.createElement('div');
+          box.setAttribute('role', 'alert');
+          box.style.cssText = 'max-width:34rem;margin:15vh auto 0;padding:0 1.5rem;font:16px/1.5 -apple-system,BlinkMacSystemFont,sans-serif;color:#222';
+          var title = document.createElement('h1');
+          title.style.cssText = 'font-size:1.4rem;margin:0 0 .75rem';
+          title.appendChild(document.createTextNode(message.title));
+          var text = document.createElement('p');
+          text.style.margin = '0';
+          text.appendChild(document.createTextNode(message.text));
+          box.appendChild(title);
+          box.appendChild(text);
+          root.appendChild(box);
+        }
+        // biome-ignore lint/complexity/useArrowFunction: this script must stay old JavaScript (no arrows).
+        window.addEventListener('error', function (event) {
+          // biome-ignore lint/complexity/useOptionalChain: this script must stay old JavaScript (no `?.`).
+          if (/SyntaxError|Invalid regular expression/.test(String(event && event.message))) show();
+        });
+        setTimeout(show, 8000);
+      })();
+    </script>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

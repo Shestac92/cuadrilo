@@ -1,0 +1,57 @@
+{
+  "name": "cuadrilo",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A self-hosted platform for interactive language lessons: a lesson editor, live classes, homework and exercises (Express + React)",
+  "keywords": [
+    "education",
+    "language-learning",
+    "lessons",
+    "exercises",
+    "homework",
+    "self-hosted",
+    "mcp",
+    "react",
+    "express",
+    "mantine",
+    "typescript"
+  ],
+  "homepage": "https://github.com/Shestac92/cuadrilo#readme",
+  "bugs": {
+    "url": "https://github.com/Shestac92/cuadrilo/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Shestac92/cuadrilo.git"
+  },
+  "author": "Aleksandr Shestakov",
+  "license": "MIT",
+  "funding": {
+    "type": "individual",
+    "url": "https://buymeacoffee.com/shestac92"
+  },
+  "workspaces": [
+    "shared",
+    "server",
+    "client"
+  ],
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "packageManager": "npm@11.19.0",
+  "scripts": {
+    "dev": "concurrently -k -n server,client -c blue,green \"npm run dev -w server\" \"npm run dev -w client\"",
+    "share": "npm run build -w client && concurrently -k -n server,client -c blue,green \"npm start -w server\" \"npm run preview -w client\"",
+    "typecheck": "npm run typecheck -w shared && npm run typecheck -w server && npm run typecheck -w client",
+    "test": "npm test -w server && npm test -w client",
+    "lint": "biome check .",
+    "format": "biome check --write ."
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.5.15",
+    "concurrently": "10.0.6"
+  },
+  "overrides": {
+    "@types/express": "5.0.6"
+  }
+}

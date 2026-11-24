@@ -1,0 +1,29 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "dev",
+      "runtimeExecutable": "env",
+      "runtimeArgs": ["PORT=8080", "npm", "run", "dev"],
+      "port": 5173
+    },
+    {
+      "name": "dev-en",
+      "runtimeExecutable": "env",
+      "runtimeArgs": ["PORT=8080", "APP_LANG=en", "npm", "run", "dev"],
+      "port": 5173
+    },
+    {
+      "name": "share",
+      "runtimeExecutable": "env",
+      "runtimeArgs": ["PORT=8080", "npm", "run", "share"],
+      "port": 4173
+    },
+    {
+      "name": "site",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-m", "http.server", "4188", "--directory", "site"],
+      "port": 4188
+    }
+  ]
+}

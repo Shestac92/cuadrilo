@@ -1,0 +1,20 @@
+[Unit]
+Description=Cuadrilo
+After=network.target
+
+[Service]
+User=cuadrilo
+Group=cuadrilo
+WorkingDirectory=/opt/cuadrilo/server
+EnvironmentFile=/opt/cuadrilo/.env
+ExecStart=/opt/cuadrilo/node_modules/.bin/tsx src/index.ts
+Restart=always
+RestartSec=3
+# The service writes only to its data folder.
+ProtectSystem=strict
+ReadWritePaths=/opt/cuadrilo/data
+PrivateTmp=true
+NoNewPrivileges=true
+
+[Install]
+WantedBy=multi-user.target

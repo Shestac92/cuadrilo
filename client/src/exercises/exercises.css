@@ -1,0 +1,1862 @@
+/*
+ * Exercise components (client/src/exercises). Only the theme's values: colors
+ * through the tokens of styles.css (ok / bad = Mantine green / red), radii,
+ * spacing and shadows from Mantine's variables. The confetti colors are
+ * decoration.
+ */
+
+.ex {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--mantine-radius-md);
+  padding: var(--mantine-spacing-md) var(--mantine-spacing-lg);
+  margin-bottom: var(--mantine-spacing-md);
+}
+
+.ex-head {
+  display: flex;
+  /* The controls drop under the title when there is no room beside it. */
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.ex-number {
+  flex: 0 0 auto;
+  min-width: 28px;
+  height: 28px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: var(--primary);
+  color: var(--mantine-color-white);
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ex-actions {
+  margin-left: auto;
+  display: flex;
+  /* On a narrow card the controls wrap to a second row; none of them is squeezed (the mode switch breaks when narrower). */
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+.ex-actions > * {
+  flex: none;
+  max-width: 100%;
+}
+
+/* The mode switch and the page's actions may both be absent. */
+.ex-actions:empty {
+  display: none;
+}
+
+/* Chosen (the teacher assigning homework). */
+.ex.ex-highlighted {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 1px var(--primary);
+}
+
+/* The teacher showed this exercise to the student. */
+.ex.ex-flash {
+  animation: ex-flash 2.4s ease-out;
+}
+
+@keyframes ex-flash {
+  0%,
+  50% {
+    box-shadow: 0 0 0 3px var(--primary);
+  }
+  100% {
+    box-shadow: 0 0 0 3px transparent;
+  }
+}
+
+.ex-title {
+  flex: 1 1 10rem;
+  margin: 0;
+  font-size: var(--mantine-font-size-lg);
+  line-height: 1.4;
+}
+
+/*
+ * A column, not a grid: the exercise's blocks and the teacher's comment under
+ * them follow each other, each as tall as its content. The comment is always
+ * the last child and never shares space with the block above it.
+ */
+.ex-body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.ex-body > * {
+  flex: 0 0 auto;
+  min-width: 0;
+}
+
+/* ----- check bar and marks ----- */
+
+.ex-check {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.ex-result {
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: var(--mantine-radius-sm);
+}
+
+.ex-result.ok {
+  color: var(--ok);
+  background: var(--ok-bg);
+}
+
+.ex-result.bad {
+  color: var(--bad);
+  background: var(--bad-bg);
+}
+
+/* ----- media and text ----- */
+
+.ex-image {
+  margin: 0;
+}
+
+.ex-image img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--mantine-radius-md);
+  border: 1px solid var(--border);
+}
+
+/*
+ * The teacher's choice of size (IMAGE_SCALES in shared/src/lesson.ts). s / m / l
+ * are fixed widths, so pictures of one size look alike (a smaller one is
+ * enlarged); on a narrow screen they shrink to the page. A very tall picture
+ * stops at 1.5 times the width and is fitted into that (contain). 'original'
+ * is the picture's own size, down to the page width: a scan stays legible.
+ */
+.ex-image-s {
+  --ex-image-width: 200px;
+}
+
+.ex-image-m {
+  --ex-image-width: 360px;
+}
+
+.ex-image-l {
+  --ex-image-width: 560px;
+}
+
+.ex-image-s img,
+.ex-image-m img,
+.ex-image-l img {
+  width: var(--ex-image-width);
+  max-height: calc(var(--ex-image-width) * 1.5);
+  object-fit: contain;
+}
+
+/*
+ * Compare (two pictures and a slider): s / m / l are fixed widths as for an image
+ * (down to the page width); 'original' fills the column, no wider than a video.
+ * The pictures are the library's own (fitted into the slider), not the .ex-image img rules.
+ */
+.ex-compare {
+  max-width: 100%;
+}
+
+.ex-compare.ex-image-s,
+.ex-compare.ex-image-m,
+.ex-compare.ex-image-l {
+  width: var(--ex-image-width);
+}
+
+.ex-compare.ex-image-original {
+  max-width: 720px;
+}
+
+.ex-compare-frame {
+  border-radius: var(--mantine-radius-md);
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+
+.ex-compare img {
+  width: 100%;
+  max-height: none;
+  border: 0;
+  border-radius: 0;
+}
+
+/*
+ * Hotspots: the picture with zones. The stage is as big as the picture (s / m / l
+ * are fixed widths as for an image), the zones and marks are laid over it in
+ * percent, so they stay in place at any size. The picture is not letterboxed
+ * (the .ex-image img rules): a click is worked out against its whole box.
+ */
+.ex-hotspots {
+  max-width: 100%;
+}
+
+.ex-hotspots.ex-image-s,
+.ex-hotspots.ex-image-m,
+.ex-hotspots.ex-image-l {
+  width: var(--ex-image-width);
+}
+
+.hotspots-stage {
+  position: relative;
+  width: fit-content;
+  max-width: 100%;
+  line-height: 0;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.ex-hotspots.ex-image-s .hotspots-stage,
+.ex-hotspots.ex-image-m .hotspots-stage,
+.ex-hotspots.ex-image-l .hotspots-stage {
+  width: 100%;
+}
+
+.hotspots-stage img {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  max-height: none;
+  height: auto;
+  object-fit: fill;
+  -webkit-user-drag: none;
+}
+
+.hotspots-stage.pointing {
+  cursor: crosshair;
+}
+
+.hotspot-zone {
+  position: absolute;
+  box-sizing: border-box;
+  pointer-events: none;
+  border: 2px solid var(--mantine-color-blue-6);
+  background: color-mix(in srgb, var(--mantine-color-blue-6) 18%, transparent);
+}
+
+.hotspot-zone.circle {
+  aspect-ratio: 1;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.hotspot-zone.selected {
+  border-style: dashed;
+  background: color-mix(in srgb, var(--mantine-color-blue-6) 32%, transparent);
+}
+
+.hotspot-zone.key {
+  border-color: var(--muted);
+  border-style: dashed;
+  background: color-mix(in srgb, var(--muted) 14%, transparent);
+}
+
+.hotspot-zone.key.found {
+  border-style: solid;
+  border-color: var(--mantine-color-green-6);
+  background: color-mix(in srgb, var(--mantine-color-green-6) 16%, transparent);
+}
+
+.hotspot-number {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  min-width: 18px;
+  padding: 0 4px;
+  border-radius: 9px;
+  background: var(--mantine-color-blue-6);
+  color: white;
+  font-size: 11px;
+  line-height: 18px;
+  text-align: center;
+}
+
+.hotspot-zone.circle .hotspot-number {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.hotspot-handle {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  box-sizing: border-box;
+  border: 2px solid var(--mantine-color-blue-6);
+  border-radius: 50%;
+  background: white;
+  transform: translate(-50%, -50%);
+  cursor: nwse-resize;
+  touch-action: none;
+}
+
+.hotspots-editing {
+  cursor: crosshair;
+  touch-action: none;
+  outline: none;
+}
+
+.hotspots-editing:focus-visible {
+  outline: 2px solid var(--mantine-color-blue-5);
+}
+
+.hotspot-mark,
+.hotspot-miss {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  border-radius: 50%;
+  background: white;
+  filter: drop-shadow(0 1px 2px rgb(0 0 0 / 35%));
+}
+
+.hotspot-mark {
+  color: var(--mantine-color-green-6);
+}
+
+.hotspot-miss {
+  color: var(--mantine-color-red-6);
+  animation: hotspot-miss 0.7s ease-out forwards;
+}
+
+@keyframes hotspot-miss {
+  from {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.3);
+  }
+
+  to {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.8);
+  }
+}
+
+.ex-video {
+  max-width: 720px;
+  border-radius: var(--mantine-radius-md);
+  overflow: hidden;
+}
+
+/* ----- dictation ----- */
+
+.ex-dictation {
+  display: grid;
+  gap: 14px;
+}
+
+.dictation-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.dictation-audio {
+  display: flex;
+  gap: 6px;
+  flex: none;
+}
+
+/* Room for the check button, which sits in the last row: the fields line up. */
+.dictation-audio.reserve {
+  min-width: calc(3 * 34px + 2 * 6px);
+}
+
+.dictation-main {
+  display: grid;
+  gap: 6px;
+  flex: 1;
+  min-width: 0;
+}
+
+.ex .dictation-input {
+  font: inherit;
+  width: 100%;
+  padding: 6px 10px;
+  border: none;
+  border-bottom: 2px solid var(--muted);
+  border-radius: var(--mantine-radius-xs) var(--mantine-radius-xs) 0 0;
+  background: var(--bg);
+}
+
+.ex .dictation-input:focus {
+  outline: none;
+  border-bottom-color: var(--primary);
+  background: var(--highlight-bg);
+}
+
+.ex .dictation-input[readonly] {
+  background: var(--bg-strong);
+}
+
+.dictation-result {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 6px 8px;
+  border: 1px solid var(--mantine-color-gray-2);
+  border-radius: var(--mantine-radius-sm);
+}
+
+.dictation-word {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 1px 8px;
+  border-radius: var(--mantine-radius-sm);
+}
+
+.dictation-word.ok {
+  background: var(--ok-bg);
+  color: var(--ok);
+}
+
+.dictation-word.bad {
+  background: var(--bad-bg);
+  color: var(--bad);
+}
+
+/* A word the student left out: where it belongs, never which word. */
+.dictation-word.missing {
+  border: 1px dashed var(--bad);
+  background: transparent;
+}
+
+/* A Genially: a frame of the chosen proportions, as wide as the column up to 900px. */
+.ex-genially {
+  max-width: 900px;
+  border-radius: var(--mantine-radius-md);
+  overflow: hidden;
+  background: var(--bg-strong);
+}
+
+.ex-genially-consent {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--mantine-spacing-sm);
+  padding: var(--mantine-spacing-md);
+  text-align: center;
+}
+
+.ex-genially iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.ex-audio {
+  max-width: 720px;
+}
+
+.ex-audio .rhap_container {
+  box-shadow: none;
+  border: 1px solid var(--border);
+  border-radius: var(--mantine-radius-md);
+}
+
+.ex-audio .rhap_main-controls-button,
+.ex-audio .rhap_volume-button,
+.ex-audio .rhap_progress-indicator,
+.ex-audio .rhap_volume-indicator {
+  color: var(--primary);
+}
+
+.ex-audio .rhap_progress-filled,
+.ex-audio .rhap_progress-indicator,
+.ex-audio .rhap_volume-indicator {
+  background-color: var(--primary);
+}
+
+/* Jump buttons say how far they jump: "−5 s" / "+5 s" instead of arrows. */
+.ex-audio .rhap_rewind-button,
+.ex-audio .rhap_forward-button {
+  width: auto;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ex-audio-jump {
+  display: inline-block;
+  min-width: 44px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+/* Mini player: pinned under the header while the audio is on. */
+.ex-mini-player {
+  position: fixed;
+  /* Below the header. */
+  top: 64px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 150;
+  box-sizing: border-box;
+  width: min(640px, calc(100vw - 16px));
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  background: var(--mantine-color-body);
+  border: 1px solid var(--border);
+  border-radius: var(--mantine-radius-md);
+  box-shadow: var(--mantine-shadow-md);
+}
+
+.ex-mini-player-body {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+}
+
+.ex-mini-player-seek {
+  width: 100%;
+  accent-color: var(--primary);
+}
+
+.ex-mini-player-time {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.ex-audio-jump-button {
+  border: none;
+  background: none;
+  padding: 4px;
+  color: var(--primary);
+  cursor: pointer;
+}
+
+:root[data-viewport="mobile"] .ex-mini-player-time {
+  display: none;
+}
+
+/* Slow mode toggle: dimmed when off, highlighted when on. */
+.ex-audio-slow {
+  font-size: 1.25rem;
+  line-height: 1;
+  padding: 4px 8px;
+  border: 1px solid transparent;
+  border-radius: var(--mantine-radius-sm);
+  background: none;
+  cursor: pointer;
+  filter: grayscale(1);
+  opacity: 0.55;
+}
+
+.ex-audio-slow:hover {
+  opacity: 0.85;
+}
+
+.ex-audio-slow.active {
+  filter: none;
+  opacity: 1;
+  border-color: var(--primary);
+  background: var(--mantine-primary-color-light);
+}
+
+/* ----- essay ----- */
+
+.ex-essay-block {
+  display: grid;
+  gap: 10px;
+}
+
+/* The teacher's colours over the textarea: a layer with the same text (letters invisible). */
+.ex-essay-field {
+  position: relative;
+}
+
+.ex-highlight-layer {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.ex-highlight-text {
+  box-sizing: border-box;
+  width: 100%;
+  /* The borders are copied from the textarea as widths: they only count with a style. */
+  border-style: solid;
+  border-color: transparent;
+  color: transparent;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+}
+
+.ex-highlight {
+  color: transparent;
+  border-radius: 2px;
+}
+
+/* A colour on a light page: multiplied, so the letters under it stay dark. Lines are not blended: they must show on any background. */
+.ex-highlight-tinted {
+  mix-blend-mode: multiply;
+}
+
+/* Lines over the letters (which are invisible here: the colour of a line is its own). They add nothing to the text's size. */
+.ex-strike {
+  text-decoration: line-through solid var(--text);
+  text-decoration-thickness: 1.5px;
+}
+
+.ex-underline-line,
+.ex-underline-wave {
+  text-decoration-line: underline;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 2px;
+  /* Not under the letters' own descenders: the text is not skipped. */
+  text-decoration-skip-ink: none;
+}
+
+.ex-underline-line {
+  text-decoration-style: solid;
+  text-decoration-color: var(--text);
+}
+
+.ex-underline-wave {
+  text-decoration-style: wavy;
+  text-decoration-color: var(--mantine-color-red-6);
+}
+
+.ex-highlight-green {
+  background: color-mix(in srgb, var(--mantine-color-green-5) 40%, transparent);
+}
+
+.ex-highlight-red {
+  background: color-mix(in srgb, var(--mantine-color-red-5) 40%, transparent);
+}
+
+.ex-highlight-yellow {
+  background: color-mix(in srgb, var(--mantine-color-yellow-4) 55%, transparent);
+}
+
+.ex-highlight-blue {
+  background: color-mix(in srgb, var(--mantine-color-cyan-4) 45%, transparent);
+}
+
+/* The teacher's colours: a swatch per colour and an eraser, under the essay. */
+.ex-highlight-toolbar {
+  margin-top: 6px;
+}
+
+.ex-swatch {
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--border);
+  border-radius: var(--mantine-radius-sm);
+  /* Plain, not blended with the page: a swatch is a colour to pick. */
+  mix-blend-mode: normal;
+}
+
+.ex-swatch:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.ex-highlight-hint {
+  margin-left: 4px;
+}
+
+/* ----- the wheel of fortune ----- */
+
+.ex-wheel {
+  display: grid;
+  justify-items: center;
+  gap: 12px;
+}
+
+.ex-wheel-stage {
+  position: relative;
+  width: min(100%, 420px);
+}
+
+.ex-wheel-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.ex-wheel-label {
+  fill: #fff;
+  font-weight: 600;
+  /* A thin dark edge keeps white letters readable on the light segments. */
+  paint-order: stroke;
+  stroke: rgb(0 0 0 / 35%);
+  stroke-width: 2px;
+  stroke-linejoin: round;
+}
+
+.ex-wheel-pointer {
+  fill: var(--mantine-color-dark-8);
+  stroke: #fff;
+  stroke-width: 3px;
+  stroke-linejoin: round;
+}
+
+/* The button in the middle of the wheel. */
+.ex-wheel-hub {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20%;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  border: 4px solid #fff;
+  border-radius: 50%;
+  background: var(--primary);
+  color: #fff;
+  font: inherit;
+  font-weight: 700;
+  box-shadow: var(--mantine-shadow-md);
+  cursor: pointer;
+}
+
+.ex-wheel-hub:hover:not(:disabled) {
+  background: var(--primary-hover);
+}
+
+.ex-wheel-hub:disabled {
+  cursor: default;
+  opacity: 0.85;
+}
+
+/* What the wheel stopped on, in full. */
+.ex-wheel-result {
+  box-sizing: border-box;
+  width: min(100%, 560px);
+  min-height: 3.2em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--mantine-radius-md);
+  background: var(--surface);
+  font-size: var(--mantine-font-size-xl);
+  font-weight: 600;
+  text-align: center;
+}
+
+.ex-wheel-result-hint {
+  color: var(--muted);
+  font-size: var(--mantine-font-size-md);
+  font-weight: 400;
+}
+
+/* ----- text with gaps (typed and dragged) ----- */
+
+.ex-gap-text p {
+  margin: 0 0 12px;
+  line-height: 2.4;
+  white-space: pre-line;
+}
+
+.gap-wrap {
+  white-space: nowrap;
+}
+
+/* Safari puts its own "contacts" (and saved-password) button into a text field it takes for a name or a login; it covers the answer. */
+.ex input::-webkit-contacts-auto-fill-button,
+.ex input::-webkit-credentials-auto-fill-button {
+  visibility: hidden;
+  /* biome-ignore lint/complexity/noImportantStyles: Safari's own rule for the button is !important too. */
+  display: none !important;
+  pointer-events: none;
+  position: absolute;
+  right: 0;
+}
+
+.ex .gap-input {
+  font: inherit;
+  padding: 2px 6px;
+  margin: 0 2px;
+  border: none;
+  border-bottom: 2px solid var(--muted);
+  border-radius: var(--mantine-radius-xs) var(--mantine-radius-xs) 0 0;
+  background: var(--bg);
+  text-align: center;
+}
+
+.ex .gap-select {
+  cursor: pointer;
+  text-align-last: center;
+}
+
+.ex .gap-select:disabled {
+  opacity: 1;
+  cursor: default;
+}
+
+.ex .gap-input:focus {
+  outline: none;
+  border-bottom-color: var(--primary);
+  background: var(--highlight-bg);
+}
+
+.ex .gap-input.ok {
+  border-bottom-color: var(--ok);
+  background: var(--ok-bg);
+  color: var(--ok);
+}
+
+.ex .gap-input.bad {
+  border-bottom-color: var(--bad);
+  background: var(--bad-bg);
+  color: var(--bad);
+}
+
+/* ----- word chips (drag into gaps, order words) ----- */
+
+.word-bank {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-height: 52px;
+  padding: 10px;
+  border: 2px dashed var(--border);
+  border-radius: var(--mantine-radius-md);
+  background: var(--bg);
+  align-items: center;
+}
+
+.word-bank.over {
+  border-color: var(--primary);
+}
+
+.word-bank.vertical {
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: stretch;
+}
+
+/*
+ * The words stay in view while their exercise is on the screen (sticky inside
+ * it), under the header and under the mini player when it is on: it sets
+ * --ex-pinned-top. The bank never scrolls: it grows taller (and, at the side
+ * of pairs, wider: one column, as wide as its longest phrase) instead.
+ */
+.ex-drag-gaps .word-bank,
+.ex-sort .word-bank,
+.match-layout .word-bank {
+  position: sticky;
+  /* Below the mini player. */
+  top: var(--ex-pinned-top);
+  z-index: 5;
+  box-sizing: border-box;
+  background: var(--surface);
+  box-shadow: var(--mantine-shadow-xs);
+}
+
+.word-bank-empty {
+  color: var(--muted);
+  font-size: var(--mantine-font-size-sm);
+}
+
+.word-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border: 1px solid var(--mantine-color-gray-4);
+  border-radius: var(--mantine-radius-sm);
+  background: var(--surface);
+  box-shadow: var(--mantine-shadow-xs);
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+  /* A long press starts a drag: no system menu of a press on iOS. */
+  -webkit-touch-callout: none;
+  line-height: 1.6;
+  touch-action: none;
+}
+
+.word-chip:hover {
+  border-color: var(--primary);
+}
+
+.word-chip:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.word-chip.dragging {
+  opacity: 0.35;
+}
+
+.word-chip.overlay {
+  cursor: grabbing;
+  box-shadow: var(--mantine-shadow-md);
+  border-color: var(--primary);
+}
+
+.word-chip.locked {
+  cursor: default;
+}
+
+.word-chip.locked:hover {
+  border-color: var(--mantine-color-gray-4);
+}
+
+.drop-gap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 90px;
+  min-height: 34px;
+  margin: 0 3px;
+  padding: 1px;
+  vertical-align: middle;
+  border: 2px dashed var(--mantine-color-gray-4);
+  border-radius: var(--mantine-radius-md);
+  line-height: 1.6;
+}
+
+/* A slot for the right half of a pair: as wide as its column. */
+.drop-gap.wide {
+  display: flex;
+  justify-content: flex-start;
+  min-height: 40px;
+  margin: 0;
+}
+
+.drop-gap .word-chip.in-gap {
+  box-shadow: none;
+}
+
+.drop-gap.wide .word-chip.in-gap {
+  flex: 1;
+}
+
+.drop-gap.filled {
+  border-style: solid;
+  border-color: transparent;
+}
+
+/* A filled gap is as wide as its word: the empty gap's minimum width would leave blank space around it. */
+.drop-gap.filled:not(.wide) {
+  min-width: 0;
+}
+
+.drop-gap.over {
+  border-color: var(--primary);
+  background: var(--highlight-bg);
+}
+
+.drop-gap.ok .word-chip {
+  border-color: var(--ok);
+  background: var(--ok-bg);
+  color: var(--ok);
+}
+
+.drop-gap.bad {
+  border-color: var(--bad);
+}
+
+/* A placed word shows the result itself; the gap's own border only marks an empty gap. */
+.drop-gap.bad.filled {
+  border-color: transparent;
+}
+
+.drop-gap.bad .word-chip {
+  border-color: var(--bad);
+  background: var(--bad-bg);
+  color: var(--bad);
+}
+
+/* ----- build a word from letters ----- */
+
+.ex-letters {
+  display: grid;
+  gap: 20px;
+}
+
+.letters-item {
+  display: grid;
+  justify-items: center;
+  gap: 12px;
+}
+
+/* The cells and the pool below them are as wide as each other, letter over letter. */
+.letters-board {
+  display: grid;
+  gap: 10px;
+  max-width: 100%;
+}
+
+.letters-divider {
+  border-top: 2px dashed var(--mantine-color-gray-3);
+}
+
+.letter-pool {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  border-radius: var(--mantine-radius-md);
+}
+
+.letter-pool.over {
+  background: var(--highlight-bg);
+}
+
+.letter-slot {
+  display: inline-flex;
+  width: 42px;
+  height: 42px;
+}
+
+.ex-letters .letter-slot .word-chip {
+  flex: 1;
+}
+
+.letters-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 12px;
+}
+
+/* The words of a phrase are separated by the row's gap; the letters of a word stick together. */
+.letters-group {
+  display: inline-flex;
+  gap: 4px;
+}
+
+.ex-letters .letter-pool .word-chip,
+.ex-letters .letter-cell .word-chip {
+  justify-content: center;
+  min-width: 36px;
+  padding: 4px 0;
+}
+
+.drop-gap.letter-cell,
+.drop-gap.letter-cell.filled:not(.wide) {
+  min-width: 42px;
+  min-height: 42px;
+  margin: 0;
+}
+
+/* ----- match pairs ----- */
+
+.ex-match,
+.ex-drag-gaps,
+.ex-sort {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Each part (the bank, the groups) is as tall as its content: the block's height is the sum, nothing shrinks. */
+.ex-match > *,
+.ex-drag-gaps > *,
+.ex-sort > * {
+  flex: 0 0 auto;
+  min-width: 0;
+}
+
+/*
+ * Three equal parts: what is given (left), the empty places for the answers
+ * (middle) and the bank (right, one column). The pairs take the first two
+ * thirds; the layout is as tall as its tallest part.
+ */
+.match-layout {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  align-items: start;
+}
+
+.match-grid {
+  grid-column: span 2;
+  display: grid;
+  gap: 8px;
+}
+
+.match-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 24px minmax(0, 1fr);
+  align-items: center;
+  gap: 8px;
+}
+
+.match-left {
+  padding: 8px 12px;
+  border-radius: var(--mantine-radius-sm);
+  background: var(--bg);
+  font-weight: 600;
+}
+
+.match-arrow {
+  color: var(--muted);
+  text-align: center;
+}
+
+/* ----- sorting into groups ----- */
+
+/* The bank is above (and sticky); the groups are columns under it, as many as fit. */
+.sort-groups {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  align-items: start;
+}
+
+.sort-group {
+  display: grid;
+  align-content: start;
+  gap: 8px;
+  min-height: 110px;
+  padding: 10px;
+  border: 2px dashed var(--mantine-color-gray-4);
+  border-radius: var(--mantine-radius-md);
+}
+
+.sort-group.over {
+  border-color: var(--primary);
+  background: var(--highlight-bg);
+}
+
+.sort-group-title {
+  font-weight: 600;
+}
+
+.sort-group-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.sort-item.ok .word-chip {
+  border-color: var(--ok);
+  background: var(--ok-bg);
+  color: var(--ok);
+}
+
+.sort-item.bad .word-chip {
+  border-color: var(--bad);
+  background: var(--bad-bg);
+  color: var(--bad);
+}
+
+/* ----- test (choice) ----- */
+
+.ex-choice {
+  display: grid;
+  gap: 12px;
+}
+
+.choice-question {
+  min-width: 0;
+  margin: 0;
+  padding: 10px 12px;
+  border: 1px solid transparent;
+  border-radius: var(--mantine-radius-md);
+  background: var(--bg);
+}
+
+.choice-question.ok {
+  border-color: var(--ok);
+  background: var(--ok-bg);
+}
+
+.choice-question.bad {
+  border-color: var(--bad);
+  background: var(--bad-bg);
+}
+
+/* Floated, a legend sits inside the box instead of on its border. */
+.choice-text {
+  float: left;
+  width: 100%;
+  padding: 0;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.choice-number {
+  color: var(--muted);
+  font-weight: 400;
+}
+
+.choice-hint {
+  color: var(--muted);
+  font-weight: 400;
+  font-size: var(--mantine-font-size-sm);
+}
+
+.choice-body {
+  clear: both;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.choice-options {
+  display: grid;
+  flex: 1;
+  gap: 8px;
+}
+
+/* ----- true or false ----- */
+
+.ex-true-false {
+  display: grid;
+  gap: 8px;
+}
+
+.tf-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 10px;
+  padding: 8px 10px;
+  border: 1px solid transparent;
+  border-radius: var(--mantine-radius-md);
+  background: var(--bg);
+}
+
+.tf-row.ok {
+  border-color: var(--ok);
+  background: var(--ok-bg);
+}
+
+.tf-row.bad {
+  border-color: var(--bad);
+  background: var(--bad-bg);
+}
+
+.tf-number {
+  flex: 0 0 auto;
+  width: 20px;
+  color: var(--muted);
+}
+
+.tf-text {
+  flex: 1 1 240px;
+}
+
+.tf-buttons {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ----- order sentences (sequence) ----- */
+
+.ex-sequence {
+  display: grid;
+  gap: 12px;
+}
+
+.sequence-list {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 8px 8px 8px 36px;
+  border: 1px solid transparent;
+  border-radius: var(--mantine-radius-md);
+  background: var(--bg);
+}
+
+.sequence-list.ok {
+  border-color: var(--ok);
+  background: var(--ok-bg);
+}
+
+.sequence-list.bad {
+  border-color: var(--bad);
+  background: var(--bad-bg);
+}
+
+.sequence-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border: 1px solid var(--mantine-color-gray-4);
+  border-radius: var(--mantine-radius-sm);
+  background: var(--surface);
+  cursor: grab;
+  container-type: inline-size;
+  user-select: none;
+  touch-action: none;
+}
+
+.sequence-item::marker {
+  color: var(--muted);
+}
+
+.sequence-item.dragging {
+  position: relative;
+  z-index: 1;
+  border-color: var(--primary);
+  box-shadow: var(--mantine-shadow-sm);
+  cursor: grabbing;
+}
+
+.sequence-item.locked {
+  cursor: default;
+}
+
+.sequence-grip {
+  flex: 0 0 auto;
+  color: var(--muted);
+}
+
+/* ----- order words ----- */
+
+.ex-order {
+  display: grid;
+  gap: 12px;
+}
+
+.order-item {
+  display: grid;
+  gap: 4px;
+}
+
+.order-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.order-hint {
+  /* After the check button on the same line; moves down only when there is no room. */
+  flex: 1 1 14rem;
+}
+
+.order-number {
+  color: var(--muted);
+}
+
+.order-words {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border: 1px solid transparent;
+  border-radius: var(--mantine-radius-md);
+  background: var(--bg);
+}
+
+.order-words.ok {
+  border-color: var(--ok);
+  background: var(--ok-bg);
+}
+
+.order-words.bad {
+  border-color: var(--bad);
+  background: var(--bad-bg);
+}
+
+.order-punct {
+  font-weight: 600;
+  color: var(--muted);
+}
+
+/* ----- celebration: pure-CSS confetti when an element is all correct ----- */
+
+.ex-interactive {
+  position: relative;
+}
+
+.ex-confetti {
+  position: absolute;
+  left: 50%;
+  bottom: 24px;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.ex-confetti span {
+  position: absolute;
+  width: 8px;
+  height: 12px;
+  border-radius: 2px;
+  background: var(--c);
+  opacity: 0;
+  /* Each piece flies out on its own direction (--dx, --dy), then falls and fades. */
+  animation: ex-confetti 1.6s cubic-bezier(0.2, 0.7, 0.4, 1) forwards;
+}
+
+.ex-confetti span:nth-child(3n) {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.ex-confetti span:nth-child(1) {
+  --dx: -129px;
+  --dy: 20px;
+  --rot: 334deg;
+  --c: #2f6fed;
+  animation-delay: 83ms;
+}
+.ex-confetti span:nth-child(2) {
+  --dx: -96px;
+  --dy: 1px;
+  --rot: -254deg;
+  --c: #f59f00;
+  animation-delay: 46ms;
+}
+.ex-confetti span:nth-child(3) {
+  --dx: -162px;
+  --dy: -23px;
+  --rot: -239deg;
+  --c: #2f9e44;
+  animation-delay: 4ms;
+}
+.ex-confetti span:nth-child(4) {
+  --dx: -97px;
+  --dy: -29px;
+  --rot: 624deg;
+  --c: #e64980;
+  animation-delay: 8ms;
+}
+.ex-confetti span:nth-child(5) {
+  --dx: -108px;
+  --dy: -52px;
+  --rot: 272deg;
+  --c: #7048e8;
+  animation-delay: 7ms;
+}
+.ex-confetti span:nth-child(6) {
+  --dx: -134px;
+  --dy: -91px;
+  --rot: -306deg;
+  --c: #1098ad;
+  animation-delay: 80ms;
+}
+.ex-confetti span:nth-child(7) {
+  --dx: -125px;
+  --dy: -115px;
+  --rot: 243deg;
+  --c: #2f6fed;
+  animation-delay: 6ms;
+}
+.ex-confetti span:nth-child(8) {
+  --dx: -74px;
+  --dy: -92px;
+  --rot: -227deg;
+  --c: #f59f00;
+  animation-delay: 37ms;
+}
+.ex-confetti span:nth-child(9) {
+  --dx: -72px;
+  --dy: -124px;
+  --rot: -327deg;
+  --c: #2f9e44;
+  animation-delay: 73ms;
+}
+.ex-confetti span:nth-child(10) {
+  --dx: -47px;
+  --dy: -120px;
+  --rot: -365deg;
+  --c: #e64980;
+  animation-delay: 74ms;
+}
+.ex-confetti span:nth-child(11) {
+  --dx: -36px;
+  --dy: -159px;
+  --rot: 372deg;
+  --c: #7048e8;
+  animation-delay: 12ms;
+}
+.ex-confetti span:nth-child(12) {
+  --dx: -12px;
+  --dy: -160px;
+  --rot: -244deg;
+  --c: #1098ad;
+  animation-delay: 79ms;
+}
+.ex-confetti span:nth-child(13) {
+  --dx: 9px;
+  --dy: -116px;
+  --rot: 688deg;
+  --c: #2f6fed;
+  animation-delay: 99ms;
+}
+.ex-confetti span:nth-child(14) {
+  --dx: 29px;
+  --dy: -127px;
+  --rot: 656deg;
+  --c: #f59f00;
+  animation-delay: 46ms;
+}
+.ex-confetti span:nth-child(15) {
+  --dx: 47px;
+  --dy: -119px;
+  --rot: -434deg;
+  --c: #2f9e44;
+  animation-delay: 89ms;
+}
+.ex-confetti span:nth-child(16) {
+  --dx: 61px;
+  --dy: -105px;
+  --rot: 263deg;
+  --c: #e64980;
+  animation-delay: 67ms;
+}
+.ex-confetti span:nth-child(17) {
+  --dx: 96px;
+  --dy: -119px;
+  --rot: 531deg;
+  --c: #7048e8;
+  animation-delay: 36ms;
+}
+.ex-confetti span:nth-child(18) {
+  --dx: 123px;
+  --dy: -113px;
+  --rot: -254deg;
+  --c: #1098ad;
+  animation-delay: 65ms;
+}
+.ex-confetti span:nth-child(19) {
+  --dx: 118px;
+  --dy: -80px;
+  --rot: 348deg;
+  --c: #2f6fed;
+  animation-delay: 19ms;
+}
+.ex-confetti span:nth-child(20) {
+  --dx: 137px;
+  --dy: -65px;
+  --rot: -611deg;
+  --c: #f59f00;
+  animation-delay: 85ms;
+}
+.ex-confetti span:nth-child(21) {
+  --dx: 95px;
+  --dy: -29px;
+  --rot: 501deg;
+  --c: #2f9e44;
+  animation-delay: 88ms;
+}
+.ex-confetti span:nth-child(22) {
+  --dx: 133px;
+  --dy: -19px;
+  --rot: 688deg;
+  --c: #e64980;
+  animation-delay: 8ms;
+}
+.ex-confetti span:nth-child(23) {
+  --dx: 101px;
+  --dy: 1px;
+  --rot: 456deg;
+  --c: #7048e8;
+  animation-delay: 89ms;
+}
+.ex-confetti span:nth-child(24) {
+  --dx: 97px;
+  --dy: 15px;
+  --rot: 242deg;
+  --c: #1098ad;
+  animation-delay: 82ms;
+}
+
+@keyframes ex-confetti {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) rotate(0);
+  }
+  60% {
+    opacity: 1;
+    transform: translate(var(--dx), var(--dy)) rotate(calc(var(--rot) * 0.6));
+  }
+  100% {
+    opacity: 0;
+    transform: translate(calc(var(--dx) * 1.15), calc(var(--dy) + 90px)) rotate(var(--rot));
+  }
+}
+
+/* ----- theory: Markdown ----- */
+
+/* Coloured words (`:red[words]`): Mantine's colour for text, light on a dark page. */
+.ex-c-gray {
+  color: var(--mantine-color-gray-text);
+}
+.ex-c-red {
+  color: var(--mantine-color-red-text);
+}
+.ex-c-pink {
+  color: var(--mantine-color-pink-text);
+}
+.ex-c-grape {
+  color: var(--mantine-color-grape-text);
+}
+.ex-c-violet {
+  color: var(--mantine-color-violet-text);
+}
+.ex-c-indigo {
+  color: var(--mantine-color-indigo-text);
+}
+.ex-c-blue {
+  color: var(--mantine-color-blue-text);
+}
+.ex-c-cyan {
+  color: var(--mantine-color-cyan-text);
+}
+.ex-c-teal {
+  color: var(--mantine-color-teal-text);
+}
+.ex-c-green {
+  color: var(--mantine-color-green-text);
+}
+.ex-c-lime {
+  color: var(--mantine-color-lime-text);
+}
+.ex-c-orange {
+  color: var(--mantine-color-orange-text);
+}
+
+.ex-markdown {
+  line-height: 1.6;
+}
+
+.ex-markdown > :first-child {
+  margin-top: 0;
+}
+
+.ex-markdown > :last-child {
+  margin-bottom: 0;
+}
+
+.ex-markdown table {
+  border-collapse: collapse;
+  margin: 12px 0;
+  background: var(--surface);
+}
+
+.ex-markdown th,
+.ex-markdown td {
+  border: 1px solid var(--border);
+  padding: 6px 12px;
+  text-align: left;
+}
+
+.ex-markdown th {
+  background: var(--bg);
+}
+
+.ex-markdown blockquote {
+  margin: 12px 0;
+  padding: 4px 14px;
+  border-left: 3px solid var(--primary);
+  color: var(--muted);
+}
+
+.ex-markdown img {
+  max-width: 100%;
+}
+
+/* ----- the teacher's view: the right answers ----- */
+
+/* Beside a wrong or an unfilled answer: the key in grey. */
+.gap-key {
+  margin-left: 4px;
+  color: var(--muted);
+  font-size: 0.9em;
+  white-space: nowrap;
+}
+
+.gap-key::before {
+  content: "→ ";
+}
+
+/* In a gap nobody filled in. */
+.ex .gap-input::placeholder,
+.gap-key-ghost {
+  color: var(--muted);
+  font-style: italic;
+  opacity: 1;
+}
+
+.gap-key-ghost {
+  padding: 0 8px;
+  white-space: nowrap;
+}
+
+/* A word that belongs to no gap. */
+.word-chip.distractor {
+  opacity: 0.55;
+  border-style: dashed;
+}
+
+/* The teacher's view of a test: the right options carry a tick. */
+.choice-right {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--ok);
+  font-weight: 600;
+}
+
+/* The right sentence of the order exercise: all chips grey. */
+.order-words.key {
+  /* Its own line; the student's order goes under it. */
+  flex: 0 0 100%;
+}
+
+.order-words.key .word-chip {
+  color: var(--muted);
+}
+
+/* Each line's right place, and the right order itself when nobody answered. */
+.sequence-key {
+  margin-left: auto;
+  flex: none;
+  min-width: 1.6em;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: var(--bg-strong);
+  color: var(--muted);
+  font-size: 0.85em;
+  text-align: center;
+}
+
+.sequence-list.key .sequence-item {
+  color: var(--muted);
+}
+
+/* The right word of a build-word exercise, and the sort exercise's right words: grey. */
+.letters-row.key .word-chip,
+.word-chip.ghost {
+  color: var(--muted);
+}
+
+.word-chip.ghost {
+  border-style: dashed;
+  background: transparent;
+}
+
+.letters-item .letters-row.key {
+  justify-content: center;
+}
+
+/* Word search: the grid (square cells, letters scaled to the grid's width) and the list of words beside it. */
+.wordsearch-layout {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.wordsearch-grid {
+  display: grid;
+  flex: 1 1 320px;
+  min-width: 0;
+  max-width: 560px;
+  grid-template-columns: repeat(var(--n), minmax(0, 1fr));
+  container-type: inline-size;
+  /* Safari needs the prefix: without it a drag over the letters selects text. */
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  touch-action: none;
+}
+
+.wordsearch-grid.pointing {
+  cursor: pointer;
+}
+
+.wordsearch-cell {
+  display: grid;
+  aspect-ratio: 1;
+  place-items: center;
+  border-radius: 6px;
+  font-size: calc(100cqw / var(--n) * 0.42);
+  font-weight: 500;
+  line-height: 1;
+}
+
+.wordsearch-cell.key {
+  background: color-mix(in srgb, var(--muted) 18%, transparent);
+}
+
+.wordsearch-cell.found {
+  background: color-mix(in srgb, var(--mantine-color-green-6) 24%, transparent);
+  color: var(--mantine-color-green-9);
+}
+
+.wordsearch-cell.selected {
+  background: color-mix(in srgb, var(--mantine-color-blue-6) 30%, transparent);
+}
+
+.wordsearch-words {
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 120px;
+  max-width: 220px;
+  margin: 0;
+  padding: 8px 16px;
+  border-radius: var(--mantine-radius-sm);
+  background: color-mix(in srgb, var(--muted) 10%, transparent);
+  font-weight: 600;
+  list-style: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.wordsearch-words li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.wordsearch-words li.found {
+  color: var(--mantine-color-green-8);
+  text-decoration: line-through;
+}
+
+/* The editor's grid: the letters that are not part of a word are inputs. */
+.wordsearch-edit {
+  flex: none;
+  max-width: 440px;
+}
+
+.wordsearch-edit .wordsearch-cell input {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.wordsearch-edit .wordsearch-cell input:focus {
+  border-color: var(--primary);
+  outline: none;
+  background: color-mix(in srgb, var(--mantine-color-blue-6) 14%, transparent);
+}

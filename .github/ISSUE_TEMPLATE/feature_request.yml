@@ -1,0 +1,25 @@
+name: Feature request
+description: An idea or a need of a teacher or a student
+labels: [enhancement]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Cuadrilo is a closed place for one teacher's own students. Please read what it is meant to be
+        and what it is not (docs/why.md, "Where it is going") before you ask.
+  - type: textarea
+    id: situation
+    attributes:
+      label: The situation
+      description: What were you trying to do as a teacher or a student, and what got in the way?
+    validations:
+      required: true
+  - type: textarea
+    id: idea
+    attributes:
+      label: Your idea
+      description: What would you like to see? Any ideas on how are welcome.
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: What you do instead today

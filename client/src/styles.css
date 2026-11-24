@@ -1,0 +1,1126 @@
+/*
+ * App-specific styles. Generic UI (layout, buttons, inputs, cards, badges,
+ * tables) comes from Mantine; what is left here are our own widgets: the
+ * side column of lesson pages, the homework widget, the translator popup
+ * (the board: board/board.css; exercise widgets: exercises/exercises.css).
+ * The tokens below point at Mantine's theme variables so these widgets follow
+ * the theme.
+ */
+
+:root {
+  --primary: var(--mantine-primary-color-filled);
+  --primary-hover: var(--mantine-primary-color-filled-hover);
+  /* The tinted plates (the class invitation, the word review): the theme's lightest tint; dark mode below. */
+  --plate-bg: var(--mantine-primary-color-0);
+  --surface: var(--mantine-color-body);
+  /* Backgrounds that follow the light / dark mode (the user's own choice). */
+  --bg: var(--mantine-color-gray-0);
+  --bg-strong: var(--mantine-color-gray-1);
+  --text: var(--mantine-color-text);
+  --muted: var(--mantine-color-dimmed);
+  --border: var(--mantine-color-default-border);
+  --danger: var(--mantine-color-red-filled);
+  --ok: var(--mantine-color-green-8);
+  --ok-bg: var(--mantine-color-green-light);
+  --bad: var(--mantine-color-red-7);
+  --bad-bg: var(--mantine-color-red-light);
+  /*
+   * Where pinned things start (word bank, mini player). Under the mobile header
+   * by default; on desktop the header is collapsed (see below).
+   * The mini player may rewrite --ex-pinned-top on :root while audio plays.
+   */
+  --ex-pinned-top: 64px;
+  --app-sticky-top: 64px;
+  --app-side-top: 72px;
+  /* A field in focus, a slot a word is dragged over. */
+  --highlight-bg: var(--mantine-color-blue-light);
+  /* Brand accents: the class banner (and its button), the profile avatar. Change the look here. */
+  --accent-sage: var(--mantine-color-sage-4);
+  --accent-sage-contrast: #fff;
+  --accent-blush: #f2b3c1;
+  /* The edge of a white card on the page's white: the theme's colour, soft. Cards: .card-edge; the board uses it too. */
+  --edge: color-mix(in srgb, var(--primary) 45%, transparent);
+  /* A card is lifted off the page by a neutral grey shadow: the main part falls to the right and down, and a tight faint ring all round keeps the top edge readable (a white card on the page's peach wash is lost without it). */
+  --card-lift: 0 0 5px rgb(0 0 0 / 11%), 5px 9px 20px -6px rgb(0 0 0 / 18%);
+  --card-lift-hover: 0 0 6px rgb(0 0 0 / 14%), 6px 12px 26px -6px rgb(0 0 0 / 24%);
+  --accent-avatar: linear-gradient(135deg, var(--accent-sage), var(--accent-blush));
+}
+
+/* The phone's header is the only one (layout/viewport.ts); on desktop there is none. */
+:root[data-viewport="desktop"] {
+  --ex-pinned-top: 16px;
+  --app-sticky-top: 16px;
+  --app-side-top: 16px;
+}
+
+/* (Written out: the preprocessor turns light-dark() into a selector that does not match :root itself.) */
+:root[data-mantine-color-scheme="dark"] {
+  --bg: var(--mantine-color-dark-6);
+  --bg-strong: var(--mantine-color-dark-5);
+  /* The lightest tint would glare on dark: the theme's colour, only a hint of it, over the page. */
+  --plate-bg: color-mix(in srgb, var(--mantine-primary-color-filled) 16%, var(--mantine-color-body));
+  /* A shadow does not show on a dark page: a card is a step lighter than the page instead, with a deeper shadow under it. */
+  --card-surface: var(--mantine-color-dark-6);
+  --card-lift: 0 0 5px rgb(0 0 0 / 40%), 5px 9px 20px -6px rgb(0 0 0 / 65%);
+  --card-lift-hover: 0 0 6px rgb(0 0 0 / 50%), 6px 12px 26px -6px rgb(0 0 0 / 75%);
+}
+
+/* The theme may set a backdrop (--app-backdrop, a gradient); without one the page is the body colour. */
+body {
+  background-color: var(--mantine-color-body);
+  background-image: var(--app-backdrop, none);
+  background-repeat: no-repeat;
+}
+
+/*
+ * Mantine Tabs (variant default): no full-width rule under the list; active and
+ * hover use weight, not a filled hover background. Pseudo-classes cannot live in
+ * theme component styles (inline only), so this lives here after @mantine/core.
+ */
+.mantine-Tabs-list::before {
+  display: none;
+}
+
+.mantine-Tabs-tab {
+  font-weight: 400;
+}
+
+.mantine-Tabs-tab[data-active] {
+  font-weight: 600;
+}
+
+@media (hover: hover) {
+  .mantine-Tabs-tab:hover {
+    background-color: transparent;
+    font-weight: 600;
+  }
+
+  .mantine-Tabs-tab:hover:not([data-active]) {
+    border-color: transparent;
+  }
+}
+
+@media (hover: none) {
+  .mantine-Tabs-tab:active {
+    background-color: transparent;
+    font-weight: 600;
+  }
+
+  .mantine-Tabs-tab:active:not([data-active]) {
+    border-color: transparent;
+  }
+}
+
+/* ----- app shell navigation ----- */
+
+.nav-logo {
+  display: block;
+  flex-shrink: 1;
+  min-width: 0;
+}
+
+.brand-logo-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.app-navbar {
+  display: flex;
+  flex-direction: column;
+  border-inline-end: 1px solid var(--mantine-color-blush-1, #ffe8ef);
+}
+
+.nav-side-link {
+  border-radius: var(--mantine-radius-sm);
+  /* Active item: peach from the blush palette. Classic has no peach, so the primary colour stays. */
+  --nl-bg: var(--mantine-color-peach-light, var(--mantine-primary-color-light));
+  --nl-hover: var(--mantine-color-peach-light-hover, var(--mantine-primary-color-light-hover));
+  --nl-color: var(--mantine-color-peach-light-color, var(--mantine-primary-color-light-color));
+}
+
+.nav-side-link.mini {
+  justify-content: center;
+}
+
+.nav-side-link.mini .mantine-NavLink-section {
+  margin-inline-end: 0;
+}
+
+.nav-side-link-wrap {
+  position: relative;
+}
+
+.nav-mini-badge {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  pointer-events: none;
+}
+
+.nav-profile {
+  display: block;
+  width: 100%;
+  padding: 8px;
+  border-radius: var(--mantine-radius-sm);
+}
+
+.nav-profile:hover {
+  background: var(--mantine-color-default-hover);
+}
+
+.nav-profile.mini {
+  padding: 8px 0;
+}
+
+.nav-profile-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.nav-profile-chevron {
+  flex-shrink: 0;
+  color: var(--mantine-color-dimmed);
+}
+
+/* Collapsed navbar: the "En clase" dot is positioned against this box. */
+.nav-account.mini {
+  position: relative;
+}
+
+/* Expanded: the pill sits above the avatar, lined up with its left edge
+   (the profile button pads 8px). */
+.nav-in-class {
+  margin: 0 8px 4px;
+}
+
+/* Collapsed: no words, just the glowing dot on the avatar's top-right corner.
+   The profile button pads 8px and centres a 36px avatar, so the corner is at
+   50% + 18px across and 8px down; the dot (8px) plus its ring is centred there. */
+.nav-avatar-live {
+  position: absolute;
+  z-index: 2;
+  top: 2px;
+  left: calc(50% + 12px);
+  display: inline-flex;
+  padding: 2px;
+  border-radius: 50%;
+  background: var(--mantine-color-body);
+  line-height: 0;
+}
+
+.nav-avatar-live-link {
+  display: inline-flex;
+  line-height: 0;
+  border-radius: 50%;
+}
+
+/* A warning that stays under the app header (or the top on desktop) while the page scrolls. */
+.sticky-notice {
+  position: sticky;
+  top: var(--app-sticky-top);
+  z-index: 20;
+}
+
+/* ----- page header ----- */
+
+.page-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  margin-bottom: 4px;
+}
+
+/* The class page's top bar: the lesson (title and select in one) and the class's two buttons. */
+.class-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  margin-bottom: 12px;
+}
+
+.class-bar-lesson {
+  flex: 1 1 14rem;
+  max-width: 32rem;
+}
+
+.class-bar-actions {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+}
+
+.class-bar-actions > * {
+  flex: none;
+}
+
+/* On a narrow bar the "show" label is cut with an ellipsis, so the two buttons stay on one row. */
+.class-bar-actions > .class-bar-show {
+  flex: 0 1 auto;
+  min-width: 0;
+}
+
+.class-bar-show .mantine-Button-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.class-bar-slot {
+  display: contents;
+}
+
+/* ----- live marks ----- */
+
+/* "Something is going on now": the class (student's home and header). */
+.live-dot {
+  display: inline-block;
+  flex: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--mantine-primary-color-filled);
+  box-shadow: 0 0 0 0 var(--mantine-primary-color-3);
+  animation: live-pulse 2s infinite;
+}
+
+.live-dot.small {
+  width: 8px;
+  height: 8px;
+}
+
+/* On the green class banner the same pulse is white. The alert message
+   clips overflow, so the ring needs the bar's own padding to stay inside. */
+.class-banner .live-dot {
+  background: var(--accent-sage-contrast);
+  box-shadow: 0 0 0 0 rgb(255 255 255 / 70%);
+}
+
+/* Row vs stack depends on the bar width (sidebar eats horizontal space). */
+.class-banner {
+  container-type: inline-size;
+  overflow: visible;
+}
+
+.class-banner__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+}
+
+.class-banner__top {
+  display: flex;
+  align-items: center;
+  gap: var(--mantine-spacing-sm);
+  min-width: 0;
+}
+
+.class-banner__label {
+  flex-shrink: 0;
+}
+
+.class-banner__lesson-inline {
+  display: none;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.class-banner__lesson-stacked {
+  min-width: 0;
+}
+
+.class-banner__action {
+  justify-self: start;
+  white-space: nowrap;
+}
+
+@container (min-width: 28rem) {
+  .class-banner__layout {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    column-gap: var(--mantine-spacing-md);
+  }
+
+  .class-banner__top {
+    grid-column: 1;
+  }
+
+  .class-banner__lesson-stacked {
+    display: none;
+  }
+
+  .class-banner__lesson-inline {
+    display: block;
+  }
+
+  .class-banner__action {
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: end;
+  }
+}
+
+.class-session-card {
+  container-type: inline-size;
+}
+
+.class-session-card__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+}
+
+.class-session-card__info {
+  display: flex;
+  align-items: center;
+  gap: var(--mantine-spacing-sm);
+  min-width: 0;
+}
+
+.class-session-card__text {
+  min-width: 0;
+  flex: 1;
+}
+
+.class-session-card__action {
+  justify-self: start;
+  white-space: nowrap;
+}
+
+@container (min-width: 28rem) {
+  .class-session-card__layout {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    column-gap: var(--mantine-spacing-sm);
+  }
+
+  .class-session-card__action {
+    justify-self: end;
+  }
+}
+
+/* The class alert: big and red, to be noticed. */
+.live-dot.big {
+  width: 20px;
+  height: 20px;
+  background: var(--mantine-color-red-6);
+  box-shadow: 0 0 0 0 var(--mantine-color-red-3);
+  animation-duration: 1.4s;
+}
+
+@keyframes live-pulse {
+  70% {
+    box-shadow: 0 0 0 8px transparent;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .live-dot {
+    animation: none;
+  }
+}
+
+/* ----- class page: students ----- */
+
+.class-student {
+  border-radius: var(--mantine-radius-sm);
+  padding-right: 4px;
+}
+
+.class-student.selected {
+  background: var(--mantine-primary-color-light);
+}
+
+.class-student-main {
+  flex: 1;
+  min-width: 0;
+  padding: 6px 8px;
+  border-radius: var(--mantine-radius-sm);
+}
+
+.class-student:not(.selected) .class-student-main:hover {
+  background: var(--bg);
+}
+
+/* In the lesson: filled; in the app elsewhere: grey; offline: an empty ring. */
+.presence-dot {
+  flex: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 2px solid var(--mantine-color-gray-4);
+}
+
+.presence-dot.in-lesson {
+  background: var(--mantine-primary-color-filled);
+  border-color: var(--mantine-primary-color-filled);
+}
+
+.presence-dot.online {
+  background: var(--mantine-color-gray-5);
+  border-color: var(--mantine-color-gray-5);
+}
+
+/* ----- student's home ----- */
+
+/* No border: the shadow lifts the card (the border is kept transparent so a card's size is the same as it was with one). On dark the card is also a step lighter than the page (--card-surface). */
+.card-edge {
+  border: 1px solid transparent;
+  box-shadow: var(--card-lift);
+}
+
+:root[data-mantine-color-scheme="dark"] .card-edge {
+  background-color: var(--card-surface);
+}
+
+/* The student's board folded in an accordion: lifted like the cards (Mantine draws it with a border). */
+.dashboard-accordion .mantine-Accordion-item {
+  border: 1px solid transparent;
+  box-shadow: var(--card-lift);
+}
+
+:root[data-mantine-color-scheme="dark"] .dashboard-accordion .mantine-Accordion-item {
+  background-color: var(--card-surface);
+}
+
+.lesson-card {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+  transition: box-shadow 0.15s;
+}
+
+.lesson-card:hover {
+  box-shadow: var(--card-lift-hover);
+}
+
+.dashboard-affirmation {
+  font-style: italic;
+  color: var(--muted);
+}
+
+/*
+ * Dashboard homework / lesson previews share one height: title + status row
+ * (badge ~24px) under it, plus the card padding.
+ */
+.dashboard-preview-card {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: calc(2 * var(--mantine-spacing-md) + 1.55em + 6px + 24px);
+}
+
+/* Teacher's class invitation: a short plate, only as tall as its own content. */
+.dashboard-invite {
+  display: flex;
+  flex-direction: column;
+  align-self: start;
+}
+
+.dashboard-invite-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--mantine-spacing-sm);
+}
+
+/* The plate stays content-sized, so a long lesson title would paint past it.
+   Stretch this block to the plate and let the title end in an ellipsis. */
+.dashboard-invite-lesson {
+  align-self: stretch;
+  max-width: 100%;
+  min-width: 0;
+}
+
+/* The start form sits in the plate and uses its full width; the button stays a pill. */
+.dashboard-invite-card > .start-class-form {
+  align-self: stretch;
+  width: 100%;
+}
+
+/* On the class page the same plate keeps a card width instead of spanning the lesson. */
+.start-class-standalone {
+  width: 100%;
+  max-width: 32rem;
+}
+
+/*
+ * The word review uses the same plate. Stretch so a long translation wraps
+ * inside the column, and stack the buttons when that column is narrow
+ * (the width of the card, not of the window: the same component elsewhere).
+ */
+.vocabulary-review-card {
+  align-items: stretch;
+  container-type: inline-size;
+}
+
+.vocabulary-review__word {
+  overflow-wrap: anywhere;
+}
+
+.vocabulary-review__word.is-concealed {
+  visibility: hidden;
+}
+
+/* The sizer holds both directions of every word in one cell and sets the height. */
+.vocabulary-review__stage {
+  display: grid;
+}
+
+.vocabulary-review__sizer,
+.vocabulary-review__current {
+  grid-area: 1 / 1;
+  min-width: 0;
+}
+
+.vocabulary-review__sizer {
+  display: grid;
+  visibility: hidden;
+}
+
+.vocabulary-review__sizer > * {
+  grid-area: 1 / 1;
+}
+
+.vocabulary-review__slide {
+  min-width: 0;
+}
+
+.vocabulary-review__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--mantine-spacing-xs);
+}
+
+/*
+ * Back, whether or not it can be pressed. Mantine's disabled icon drops its
+ * border and fills grey; this keeps the board's hairline and the same arrow.
+ */
+.vocabulary-review-card .vocabulary-review__prev,
+.vocabulary-review-card .vocabulary-review__prev:hover,
+.vocabulary-review-card .vocabulary-review__prev:disabled {
+  flex: none;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--mantine-color-gray-6);
+  opacity: 1;
+}
+
+.vocabulary-review-card .vocabulary-review__prev:disabled {
+  cursor: default;
+}
+
+/* The delete icon sits on the right edge of the row, out of the way of "Mostrar". */
+.vocabulary-review__forget {
+  flex: none;
+  margin-left: auto;
+}
+
+/* "Mostrar" and "Siguiente" share one cell, so the button stays the wider of the two. */
+.vocabulary-review__next-label {
+  display: grid;
+}
+
+.vocabulary-review__next-label > * {
+  grid-area: 1 / 1;
+}
+
+.vocabulary-review__next-label > .is-concealed {
+  visibility: hidden;
+}
+
+.live-notices > * {
+  box-shadow: var(--mantine-shadow-md);
+}
+
+/* ----- homework ----- */
+
+/*
+ * Lesson pages: a side column (the board, the students) next to the lesson. It is
+ * compact: smaller type and spacing than the page. Where a SideDock wraps it
+ * (`docked`: the class page and the student's lesson) a narrower window uses a bottom sheet
+ * in the lesson area, beside the left menu (below). The others (`plain`) are stacked above
+ * the lesson on a narrow window.
+ */
+.player-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 240px;
+  gap: 16px;
+  align-items: start;
+}
+
+.player-side {
+  display: grid;
+  gap: 8px;
+  /* Compact: the column holds as much as before in less room. */
+  --mantine-font-size-sm: 0.8125rem;
+  --mantine-font-size-xs: 0.6875rem;
+  --mantine-spacing-sm: 8px;
+  --mantine-spacing-xs: 6px;
+}
+
+.player-side .mantine-Title-root {
+  font-size: 0.875rem;
+}
+
+.player-layout > .player-side {
+  grid-column: 2;
+  grid-row: 1;
+  /*
+   * The whole column stays on the screen while the lesson scrolls (the
+   * students and the board, or the board and the homework), exactly one screen
+   * tall at most: the board takes what is left, and a card that does not fit
+   * (a long list of students) scrolls inside itself, so none of them leaves the view.
+   */
+  position: sticky;
+  top: var(--app-side-top);
+  /* From its top edge to the bottom of the screen: --side-room is set by SideDock.tsx (the column is lower than 72px at the start of the page). */
+  max-height: var(--side-room, calc(100vh - 88px));
+  display: flex;
+  flex-direction: column;
+}
+
+.player-layout > .player-side > *,
+.player-layout > .player-side > .dock-flat > * {
+  flex: 0 1 auto;
+  min-height: 96px;
+  overflow-y: auto;
+}
+
+/*
+ * The class's column: the students' card takes what it needs, but no more than
+ * two fifths of the column (it scrolls inside), so the board (board.css) always
+ * keeps its room. The column ends at the bottom of the screen (--side-room).
+ */
+.player-layout.docked > .player-side > :not(.board, .sheet-panel),
+.player-layout.docked > .player-side > .dock-flat > :not(.board) {
+  /* Never squeezed by the board: it keeps its own height up to the cap; the board gives way. */
+  flex-shrink: 0;
+  min-height: 64px;
+  max-height: calc(var(--side-room, calc(100vh - 88px)) * 0.4);
+}
+
+/* A phone: the column is stacked above the lesson. */
+:root[data-viewport="mobile"] .player-layout.plain {
+  grid-template-columns: minmax(0, 1fr);
+}
+:root[data-viewport="mobile"] .player-layout.plain > .player-side {
+  grid-column: 1;
+  position: static;
+  max-height: none;
+  display: grid;
+}
+:root[data-viewport="mobile"] .player-layout.plain > .player-side > * {
+  overflow-y: visible;
+}
+
+.player-side > .dock-flat {
+  /* The wide column: the panel is only there to keep the board's place in the tree (SideDock). */
+  display: contents;
+}
+
+.player-layout.docked:has(> .player-side.sheet) {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+/*
+ * A phone: the dock is a bottom sheet in the lesson's area, not over the mobile header
+ * (the app shell's own offsets). The box is only as tall as the panel and sits on the bottom of the
+ * screen. It must not be a full-screen layer with pointer-events: none: on a Mac the trackpad then
+ * scrolls the lesson under the board instead of the board. Closed it is one line, open it is half of
+ * the screen; the lesson stays in view and clear of the panel (--sheet-cover, set by SideDock).
+ */
+.player-layout > .player-side.sheet {
+  position: fixed;
+  top: auto;
+  bottom: 0;
+  inset-inline-start: 0;
+  inset-inline-end: 0;
+  z-index: 30;
+  grid-column: 1;
+  grid-row: 1;
+  width: auto;
+  max-height: none;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 0;
+  padding: 0;
+  background: none;
+  border: 0;
+  box-shadow: none;
+  pointer-events: auto;
+}
+
+.player-side.sheet .sheet-panel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  pointer-events: auto;
+  background: var(--mantine-color-body);
+  /* Square, flush with the screen: a radius would show the page's gray in the corners. */
+  border: 0;
+  border-top: 1px solid var(--edge);
+  border-radius: 0;
+  box-shadow: 0 -8px 24px rgb(0 0 0 / 8%);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.player-side.sheet-open .sheet-panel {
+  height: 50dvh;
+}
+
+/*
+ * One button opens and closes the sheet: a slim row across the top of the panel with the chevron in
+ * the middle (the card's own top padding is taken by it, board.css). The closed bar opens it too.
+ */
+.player-side.sheet .sheet-toggle {
+  flex: none;
+  height: 18px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.player-layout > .player-side.sheet > .sheet-panel {
+  min-height: 0;
+  max-height: none;
+  flex: none;
+  /*
+   * Beats `.player-layout > .player-side > *`, which sets overflow-y: auto. That would make
+   * the panel a second scroller, and a trackpad over it moves the lesson. The lines scroll.
+   */
+  overflow: hidden;
+}
+
+/* The students button sits just above the closed bar. This follows the hidden rule, which is just as specific, so the button is not clipped. */
+.player-layout > .player-side.sheet-collapsed > .sheet-panel {
+  overflow: visible;
+}
+
+/* While the sheet glides, flex-grow would jump to the final height. The animated height is the one that counts. */
+.player-layout > .player-side.sheet > .sheet-panel.sheet-settling {
+  flex: none;
+  overflow: hidden;
+}
+
+.player-layout.docked:has(> .player-side.sheet) > :not(.player-side) {
+  grid-column: 1;
+  grid-row: 1;
+  padding-bottom: var(--sheet-cover, 48px);
+}
+
+/*
+ * The teacher's students on a phone: a narrow column at the right edge, over the page, in view while the
+ * lesson scrolls. The page keeps clear of it. It ends above the open sheet (--sheet-cover).
+ */
+.dock-rail {
+  position: fixed;
+  right: 4px;
+  top: calc(var(--app-shell-header-offset, 56px) + 6px);
+  z-index: 25;
+  width: 52px;
+  max-height: calc(100dvh - var(--app-shell-header-offset, 56px) - var(--sheet-cover, 48px) - 18px);
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  gap: 8px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+}
+
+:root[data-dock="sheet"] .mantine-AppShell-main {
+  /* A lesson on a phone: the content takes the width, 5px at the edges (the Container's own 16px goes too), and starts close to the header. */
+  padding-inline: 5px;
+  padding-block-start: calc(var(--app-shell-header-offset, 0px) + 8px);
+}
+
+:root[data-dock="sheet"] .mantine-AppShell-main > .mantine-Container-root {
+  padding-inline: 0;
+}
+
+:root[data-dock="sheet"][data-dock-rail] .mantine-AppShell-main {
+  /* The page keeps clear of the students' column (52px and its edge), the buttons above the lesson too. */
+  padding-inline-end: 60px;
+}
+
+.rail-item {
+  width: 100%;
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+}
+
+.rail-avatar {
+  position: relative;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.rail-item.selected .rail-avatar {
+  outline: 2px solid var(--mantine-primary-color-filled);
+  outline-offset: 1px;
+}
+
+.rail-name {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.6875rem;
+  line-height: 1.2;
+}
+
+.rail-item.selected .rail-name {
+  font-weight: 700;
+}
+
+.rail-avatar .presence-dot {
+  position: absolute;
+  right: -2px;
+  bottom: -2px;
+  width: 11px;
+  height: 11px;
+  border: 2px solid var(--mantine-color-body);
+  background: var(--mantine-color-gray-4);
+}
+
+.rail-avatar .presence-dot.in-lesson {
+  background: var(--mantine-primary-color-filled);
+}
+
+.rail-avatar .presence-dot.online {
+  background: var(--mantine-color-gray-6);
+}
+
+.hw-item {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+  padding: 6px 8px;
+  border: 0;
+  border-radius: 6px;
+  background: none;
+  font: inherit;
+  text-align: left;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.hw-item:hover {
+  background: var(--bg);
+}
+
+.hw-status {
+  flex: 0 0 1em;
+  text-align: center;
+  color: var(--muted);
+}
+
+.hw-title {
+  overflow-wrap: anywhere;
+}
+
+/* ----- toast: a short message at the bottom (undo a deletion, homework assigned) ----- */
+
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: calc(24px + var(--sheet-cover, 0px));
+  transform: translateX(-50%);
+  z-index: 200;
+  min-width: 320px;
+  box-shadow: var(--mantine-shadow-md);
+}
+
+/* Homework notices: bottom right, newest at the bottom, until closed. Above the sheet. */
+.live-notices {
+  position: fixed;
+  right: 16px;
+  bottom: calc(16px + var(--sheet-cover, 0px));
+  z-index: 210;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: min(360px, calc(100vw - 32px));
+}
+
+/* ----- translator ----- */
+
+.translator-popup {
+  position: fixed;
+  z-index: 300;
+}
+
+.translator-result + .translator-result {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--mantine-color-default-border);
+}
+
+/* ----- lesson editor ----- */
+.editor-tabs {
+  flex: 1;
+  min-width: 0;
+}
+
+.editor-number {
+  margin-top: 6px;
+}
+
+/* The drag handle of an exercise: level with its number; the card is pulled left so the number stays where it was. */
+.editor-handle {
+  margin: 4px -8px 0 -6px;
+}
+
+/* What follows the pointer while an exercise is dragged: its number and task only (the card itself can be very tall). */
+.editor-drag-preview {
+  display: flex;
+  align-items: center;
+  gap: var(--mantine-spacing-sm);
+  box-shadow: var(--mantine-shadow-md);
+  cursor: grabbing;
+}
+
+.editor-block {
+  border: 1px dashed var(--border);
+  border-radius: var(--mantine-radius-md);
+  padding: 10px 12px;
+}
+
+/* A block type in the "+ Bloque" dialog. */
+.block-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 84px;
+  padding: 10px 6px;
+  overflow-wrap: anywhere;
+  border: 1px solid var(--border);
+  border-radius: var(--mantine-radius-md);
+  color: var(--mantine-color-text);
+  transition:
+    background-color 120ms,
+    border-color 120ms;
+}
+
+.block-tile svg {
+  color: var(--mantine-primary-color-filled);
+}
+
+.block-tile:hover,
+.block-tile:focus-visible {
+  background: var(--mantine-primary-color-light);
+  border-color: var(--mantine-primary-color-filled);
+}
+
+.editor-drop {
+  border: 1px dashed var(--border);
+  border-radius: var(--mantine-radius-md);
+  padding: 10px 12px;
+  background: var(--bg);
+}
+
+.editor-drop-over {
+  border-color: var(--primary);
+  background: var(--mantine-primary-color-light);
+}
+
+.editor-image {
+  display: block;
+  /* In a Stack (flex column) it would be stretched to the full width. */
+  align-self: flex-start;
+  max-width: 100%;
+  max-height: 200px;
+  border-radius: var(--mantine-radius-sm);
+}
+
+.editor-audio {
+  width: 100%;
+}
+
+.editor-preview {
+  margin-top: var(--mantine-spacing-md);
+}
+
+/* The editor's fields, read-only together once the lesson changed elsewhere. */
+.editor-fieldset {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+}
+
+/* ----- media library ----- */
+
+.media-drop {
+  padding: 20px 16px;
+}
+
+.media-thumb {
+  flex: none;
+  width: 56px;
+  height: 56px;
+  border-radius: var(--mantine-radius-sm);
+  object-fit: cover;
+  background: var(--bg);
+}
+
+.media-thumb-audio {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+}
+
+.media-audio {
+  display: block;
+  width: 260px;
+  height: 32px;
+  margin-top: 6px;
+}
+
+/* "Elegir de Archivos" in the editor. */
+.media-pick {
+  border-radius: var(--mantine-radius-sm);
+  padding: 6px;
+}
+
+.media-pick:hover,
+.media-pick:focus-visible {
+  background: var(--bg);
+}
+
+.media-pick-image {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: var(--mantine-radius-sm);
+  background: var(--bg);
+}
+
+.media-pick-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}

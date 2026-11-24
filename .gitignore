@@ -17,3 +17,6 @@ data/media/*
 
 # Personal agent instructions.
 .claude.local.md
+
+# Personal local development space
+.local

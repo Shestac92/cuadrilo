@@ -4,10 +4,13 @@ import type { Messages } from './es';
 const en: Messages = {
   app: {
     tagline: 'English lessons',
-    // Shown by the page itself (client/index.html) when the app did not start: a browser too old to run it, or no JavaScript.
+    // Shown by the page itself (client/index.html): a browser below the build target (checked by its engine and version), or no JavaScript. {browser} is the name and version found.
     browserTooOld: {
-      title: 'The page could not start',
-      text: 'Your browser is probably too old. Update Safari to version 16.4 or later (or macOS, if Safari will not update), or open this address in a current Chrome, Edge or Firefox. If that is not the reason, check your connection and reload the page.',
+      title: 'Your browser is too old',
+      text: 'This page needs Safari 16.4, Chrome 111, Edge 111, Firefox 114 or later. Update your browser (on a Mac, Safari is updated with macOS) or open this address in a current Chrome, Edge or Firefox.',
+      textIos:
+        'On iPhone and iPad this page needs iOS 16.4 or later (in any browser). Update the system in Settings → General → Software Update, or open this address on a computer.',
+      yours: 'Your browser: {browser}.',
     },
     noScript: 'This page needs JavaScript. Turn it on in your browser and reload the page.',
   },
@@ -659,6 +662,8 @@ const en: Messages = {
     hotspotsHint: 'Click the picture to find the zones',
     spin: 'Spin',
     spinHint: 'Spin the wheel',
+    // Words of the comic-book celebration when an element is all correct (one at random), separated by |.
+    celebrationWords: 'BOOM!|WOW!|POW!|BRAVO!|YES!|AWESOME!|NAILED IT!',
     correct: 'correct',
     wrong: 'wrong',
     gap: 'Gap {n}',

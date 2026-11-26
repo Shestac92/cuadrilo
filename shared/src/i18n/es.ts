@@ -5,10 +5,13 @@
 const es = {
   app: {
     tagline: 'Clases de español',
-    // Shown by the page itself (client/index.html) when the app did not start: a browser too old to run it, or no JavaScript.
+    // Shown by the page itself (client/index.html): a browser below the build target (checked by its engine and version), or no JavaScript. {browser} is the name and version found.
     browserTooOld: {
-      title: 'La página no pudo iniciarse',
-      text: 'Es probable que tu navegador sea demasiado antiguo. Actualiza Safari a la versión 16.4 o posterior (o macOS, si Safari no se actualiza), o abre esta dirección en una versión actual de Chrome, Edge o Firefox. Si no es eso, comprueba tu conexión y recarga la página.',
+      title: 'Tu navegador es demasiado antiguo',
+      text: 'Esta página necesita Safari 16.4, Chrome 111, Edge 111, Firefox 114 o una versión posterior. Actualiza tu navegador (en un Mac, Safari se actualiza con macOS) o abre esta dirección en una versión actual de Chrome, Edge o Firefox.',
+      textIos:
+        'En iPhone y iPad esta página necesita iOS 16.4 o posterior (en cualquier navegador). Actualiza el sistema en Ajustes → General → Actualización de software, o abre esta dirección en un ordenador.',
+      yours: 'Tu navegador: {browser}.',
     },
     noScript: 'Esta página necesita JavaScript. Actívalo en tu navegador y recarga la página.',
   },
@@ -661,6 +664,8 @@ const es = {
     hotspotsHint: 'Haz clic en la imagen para encontrar las zonas',
     spin: 'Girar',
     spinHint: 'Gira la ruleta',
+    // Words of the comic-book celebration when an element is all correct (one at random), separated by |.
+    celebrationWords: '¡BOOM!|¡GUAU!|¡OLÉ!|¡BRAVO!|¡GENIAL!|¡ZAS!|¡TOMA YA!',
     correct: 'correcto',
     wrong: 'incorrecto',
     gap: 'Hueco {n}',

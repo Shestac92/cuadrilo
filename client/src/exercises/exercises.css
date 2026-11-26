@@ -1,8 +1,8 @@
 /*
  * Exercise components (client/src/exercises). Only the theme's values: colors
  * through the tokens of styles.css (ok / bad = Mantine green / red), radii,
- * spacing and shadows from Mantine's variables. The confetti colors are
- * decoration.
+ * spacing and shadows from Mantine's variables. The colors of the
+ * celebrations (confetti, fireworks…) are decoration.
  */
 
 .ex {
@@ -1378,7 +1378,8 @@
   color: var(--muted);
 }
 
-/* ----- celebration: pure-CSS confetti when an element is all correct ----- */
+/* ----- celebration when an element is all correct: pure CSS (confetti, fireworks, comic word, sparkles, balloons,
+   glitter, disco ball) ----- */
 
 .ex-interactive {
   position: relative;
@@ -1592,6 +1593,535 @@
   100% {
     opacity: 0;
     transform: translate(calc(var(--dx) * 1.15), calc(var(--dy) + 90px)) rotate(var(--rot));
+  }
+}
+
+/* The other celebrations (Exercise.tsx picks one at random): a band at the bottom of the element, where the last
+   answer usually is; the pieces may fly out of it. Each piece gets its place, colour and delay in CSS variables. */
+
+.ex-celebrate {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 220px;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.ex-celebrate span {
+  position: absolute;
+}
+
+/* Fireworks: a rocket rises to --h, then its sparks fly out in a ring and fall a little. */
+
+.ex-firework {
+  position: absolute;
+  left: var(--x);
+  bottom: 0;
+}
+
+.ex-rocket {
+  left: -2px;
+  bottom: 0;
+  width: 4px;
+  height: 14px;
+  border-radius: 2px;
+  background: linear-gradient(var(--c), transparent);
+  opacity: 0;
+  animation: ex-rocket 0.55s cubic-bezier(0.3, 0.6, 0.5, 1) var(--delay) forwards;
+}
+
+@keyframes ex-rocket {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(calc(var(--h) * -1));
+  }
+}
+
+.ex-spark {
+  left: -2.5px;
+  bottom: var(--h);
+  width: 5px;
+  height: 24px;
+  border-radius: 3px;
+  background: linear-gradient(var(--c) 45%, transparent);
+  opacity: 0;
+  --r: -95px;
+  animation: ex-spark 1.2s cubic-bezier(0.1, 0.8, 0.3, 1) calc(var(--delay) + 0.5s) forwards;
+}
+
+/* Every other spark makes a smaller inner ring in the second colour. */
+.ex-spark:nth-child(odd) {
+  --r: -55px;
+  height: 16px;
+  background: linear-gradient(var(--c2) 45%, transparent);
+}
+
+@keyframes ex-spark {
+  0% {
+    opacity: 1;
+    transform: translateY(0) rotate(var(--a)) translateY(0) scale(1);
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(28px) rotate(var(--a)) translateY(var(--r)) scale(0.7);
+  }
+}
+
+/* The flash where the rocket bursts. */
+.ex-firework::after {
+  content: "";
+  position: absolute;
+  left: -20px;
+  bottom: calc(var(--h) - 20px);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fff 0 15%, var(--c) 40%, transparent 70%);
+  opacity: 0;
+  animation: ex-flash 0.45s ease-out calc(var(--delay) + 0.5s) forwards;
+}
+
+@keyframes ex-flash {
+  0% {
+    opacity: 1;
+    transform: scale(0.3);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(2.2);
+  }
+}
+
+/* Comic-book word: a halftone starburst pops in tilted, the letters bounce in one by one, then it all zooms away. */
+
+.ex-comic {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ex-comic-pop {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 220px;
+  height: 160px;
+  padding: 0 40px;
+  opacity: 0;
+  animation: ex-comic-pop 1.9s cubic-bezier(0.3, 1.4, 0.5, 1) forwards;
+}
+
+@keyframes ex-comic-pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.2) rotate(calc(var(--tilt) * -3));
+  }
+  18% {
+    opacity: 1;
+    transform: scale(1.12) rotate(var(--tilt));
+  }
+  26%,
+  80% {
+    opacity: 1;
+    transform: scale(1) rotate(var(--tilt));
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.35) rotate(var(--tilt));
+  }
+}
+
+.ex-comic-burst {
+  position: absolute;
+  inset: 0;
+  background: #1a1b1e;
+  clip-path: polygon(
+    50% 0%,
+    58% 17%,
+    72% 5%,
+    71% 23%,
+    89% 19%,
+    81% 35%,
+    99% 39%,
+    84% 50%,
+    99% 61%,
+    81% 65%,
+    89% 81%,
+    71% 77%,
+    72% 95%,
+    58% 83%,
+    50% 100%,
+    42% 83%,
+    28% 95%,
+    29% 77%,
+    11% 81%,
+    19% 65%,
+    1% 61%,
+    16% 50%,
+    1% 39%,
+    19% 35%,
+    11% 19%,
+    29% 23%,
+    28% 5%,
+    42% 17%
+  );
+  animation: ex-comic-shake 0.35s steps(2) 0.3s 2;
+}
+
+.ex-comic-burst::before {
+  content: "";
+  position: absolute;
+  inset: 5px 7px;
+  background:
+    radial-gradient(circle, rgb(240 62 62 / 0.35) 1.6px, transparent 2.2px) 0 0 / 9px 9px,
+    #ffd43b;
+  clip-path: inherit;
+}
+
+@keyframes ex-comic-shake {
+  50% {
+    transform: translate(2px, -2px);
+  }
+}
+
+.ex-comic-word {
+  position: relative;
+  white-space: nowrap;
+  font-family: Impact, "Arial Black", "Helvetica Neue", sans-serif;
+  font-size: 40px;
+  font-weight: 900;
+  font-style: italic;
+  letter-spacing: 1px;
+  line-height: 1;
+  color: #f03e3e;
+  -webkit-text-stroke: 2px #1a1b1e;
+  paint-order: stroke fill;
+  text-shadow: 3px 3px 0 #1a1b1e;
+}
+
+.ex-comic-word span {
+  position: relative;
+  display: inline-block;
+  opacity: 0;
+  animation: ex-comic-letter 0.4s cubic-bezier(0.3, 1.8, 0.5, 1) calc(0.15s + var(--i) * 55ms) forwards;
+}
+
+@keyframes ex-comic-letter {
+  0% {
+    opacity: 0;
+    transform: translateY(18px) scale(0.3);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Sparkles: four-pointed stars grow, turn and vanish, twice. */
+
+.ex-sparkles span {
+  left: var(--x);
+  top: var(--y);
+  width: var(--s);
+  height: var(--s);
+  margin: calc(var(--s) / -2) 0 0 calc(var(--s) / -2);
+  background: var(--c);
+  clip-path: polygon(50% 0%, 61% 39%, 100% 50%, 61% 61%, 50% 100%, 39% 61%, 0% 50%, 39% 39%);
+  transform: scale(0);
+  animation: ex-sparkle 0.9s ease-in-out var(--delay) 2 both;
+}
+
+@keyframes ex-sparkle {
+  0% {
+    transform: scale(0) rotate(0);
+  }
+  50% {
+    transform: scale(1) rotate(45deg);
+  }
+  100% {
+    transform: scale(0) rotate(90deg);
+  }
+}
+
+/* Balloons: they rise from the bottom (outer span) and sway on their strings (inner span). */
+
+.ex-balloon {
+  left: var(--x);
+  bottom: -20px;
+  opacity: 0;
+  animation: ex-balloon-rise var(--duration) cubic-bezier(0.4, 0, 0.7, 1) var(--delay) forwards;
+}
+
+@keyframes ex-balloon-rise {
+  0% {
+    opacity: 0;
+    transform: translateY(0) scale(var(--scale));
+  }
+  12%,
+  75% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-300px) scale(var(--scale));
+  }
+}
+
+.ex-balloon span {
+  display: block;
+  position: relative;
+  width: 30px;
+  height: 36px;
+  margin-left: -15px;
+  border-radius: 50% 50% 48% 48% / 55% 55% 45% 45%;
+  background: radial-gradient(circle at 32% 28%, rgb(255 255 255 / 0.6) 0 4px, transparent 9px), var(--c);
+  transform-origin: 50% 160%;
+  animation: ex-balloon-sway 1.1s ease-in-out infinite alternate;
+}
+
+/* The knot and the string. */
+.ex-balloon span::before {
+  content: "";
+  position: absolute;
+  left: 12px;
+  bottom: -4px;
+  border: 3px solid transparent;
+  border-bottom: 5px solid var(--c);
+}
+
+.ex-balloon span::after {
+  content: "";
+  position: absolute;
+  left: 14px;
+  top: 39px;
+  width: 1px;
+  height: 30px;
+  background: var(--mantine-color-dimmed);
+}
+
+@keyframes ex-balloon-sway {
+  from {
+    transform: rotate(-7deg);
+  }
+  to {
+    transform: rotate(7deg);
+  }
+}
+
+/* Glitter: small diamonds fall with a drift and a spin (outer span) and flash as they flip (::before). */
+
+.ex-glitter {
+  height: 260px;
+  overflow: visible;
+}
+
+.ex-glitter span {
+  left: var(--x);
+  top: -20px;
+  width: var(--s);
+  height: var(--s);
+  opacity: 0;
+  animation: ex-glitter-fall var(--duration) cubic-bezier(0.35, 0.1, 0.6, 1) var(--delay) forwards;
+}
+
+.ex-glitter span::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #fff 0 18%, var(--c) 40% 70%, #fff 100%);
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+  animation: ex-glitter-flip 0.45s linear infinite;
+}
+
+.ex-glitter span:nth-child(3n)::before {
+  clip-path: none;
+  border-radius: 1px;
+  animation-duration: 0.6s;
+}
+
+@keyframes ex-glitter-fall {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) rotate(0);
+  }
+  10%,
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--drift), 270px) rotate(var(--spin));
+  }
+}
+
+@keyframes ex-glitter-flip {
+  0%,
+  100% {
+    transform: rotateY(0);
+    filter: brightness(1);
+  }
+  25% {
+    filter: brightness(1.8);
+  }
+  50% {
+    transform: rotateY(80deg);
+    filter: brightness(0.8);
+  }
+}
+
+/* Disco: the whole element goes dim, a mirror ball drops in at the top, turns (its tiles slide) and glints, and
+   coloured cones of light sweep from it; then everything fades. */
+
+.ex-disco {
+  top: 0;
+  height: auto;
+  min-height: 220px;
+  overflow: hidden;
+  border-radius: var(--mantine-radius-md);
+  animation: ex-disco-dim 3.8s ease-in-out forwards;
+}
+
+@keyframes ex-disco-dim {
+  0% {
+    background: rgb(20 14 48 / 0);
+    opacity: 1;
+  }
+  12%,
+  85% {
+    background: rgb(20 14 48 / 0.62);
+    opacity: 1;
+  }
+  100% {
+    background: rgb(20 14 48 / 0);
+    opacity: 0;
+  }
+}
+
+.ex-disco-ball {
+  position: absolute;
+  left: 50%;
+  top: 14px;
+  width: 56px;
+  height: 56px;
+  margin-left: -28px;
+  border-radius: 50%;
+  background:
+    repeating-linear-gradient(90deg, rgb(0 0 0 / 0.3) 0 1px, transparent 1px 8px),
+    repeating-linear-gradient(0deg, rgb(0 0 0 / 0.3) 0 1px, transparent 1px 8px),
+    radial-gradient(circle at 34% 30%, #fff 0 8%, #e9ecef 25%, #adb5bd 55%, #495057 85%, #212529 100%);
+  box-shadow:
+    0 0 18px rgb(255 255 255 / 0.55),
+    inset -6px -8px 14px rgb(0 0 0 / 0.35);
+  animation:
+    ex-disco-drop 0.6s cubic-bezier(0.3, 1.5, 0.5, 1) both,
+    ex-disco-turn 0.9s linear infinite;
+}
+
+/* The wire it hangs on. */
+.ex-disco-ball::before {
+  content: "";
+  position: absolute;
+  left: 27px;
+  bottom: 100%;
+  width: 2px;
+  height: 120px;
+  background: #ced4da;
+}
+
+@keyframes ex-disco-drop {
+  from {
+    transform: translateY(-110px);
+  }
+  to {
+    transform: none;
+  }
+}
+
+/* The tiles slide sideways under the fixed shading: the ball seems to turn. */
+@keyframes ex-disco-turn {
+  to {
+    background-position:
+      16px 0,
+      0 0,
+      0 0;
+  }
+}
+
+/* Glints: white four-pointed stars flashing on the ball. */
+.ex-disco-ball span {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  background: #fff;
+  clip-path: polygon(50% 0%, 60% 40%, 100% 50%, 60% 60%, 50% 100%, 40% 60%, 0% 50%, 40% 40%);
+  transform: scale(0);
+  animation: ex-sparkle 0.8s ease-in-out infinite;
+}
+
+.ex-disco-ball span:nth-child(1) {
+  left: 10px;
+  top: 8px;
+}
+
+.ex-disco-ball span:nth-child(2) {
+  left: 34px;
+  top: 20px;
+  animation-delay: 0.3s;
+}
+
+.ex-disco-ball span:nth-child(3) {
+  left: 18px;
+  top: 36px;
+  animation-delay: 0.55s;
+}
+
+.ex-disco-beams {
+  position: absolute;
+  left: 50%;
+  top: 42px;
+  opacity: 0;
+  animation: ex-disco-beams-in 0.4s ease-out 0.5s forwards;
+}
+
+@keyframes ex-disco-beams-in {
+  to {
+    opacity: 1;
+  }
+}
+
+.ex-disco-beams span {
+  position: absolute;
+  left: -45px;
+  top: 0;
+  width: 90px;
+  height: 700px;
+  transform-origin: 50% 0;
+  background: linear-gradient(var(--c), transparent 75%);
+  clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+  mix-blend-mode: screen;
+  opacity: 0.75;
+  animation: ex-disco-sweep var(--duration) ease-in-out infinite alternate;
+}
+
+@keyframes ex-disco-sweep {
+  from {
+    transform: rotate(calc(var(--a) - var(--swing)));
+  }
+  to {
+    transform: rotate(calc(var(--a) + var(--swing)));
   }
 }
 

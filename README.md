@@ -63,7 +63,7 @@ It prints a new password and signs the teacher out everywhere (assistants must b
 
 ## Supported browsers
 
-Students and teachers need a reasonably current browser: **Safari 16.4+** (macOS 11 Big Sur or newer, iOS and iPadOS 16.4+), **Chrome 111+**, **Edge 111+** or **Firefox 114+**. These are the targets of Vite's default build (`baseline-widely-available`). In an older browser the app cannot start: instead of a blank page, the page says that the browser is probably too old and what to do (the text is in the interface language, `app.browserTooOld` in `shared/src/i18n`).
+Students and teachers need a reasonably current browser: **Safari 16.4+** (macOS 11 Big Sur or newer, iOS and iPadOS 16.4+), **Chrome 111+**, **Edge 111+** or **Firefox 114+**. These are the targets of Vite's default build (`baseline-widely-available`). In an older browser the app cannot start: instead of a blank page, the page asks the browser for its engine, version and system (on iPhone and iPad every browser runs on the system's Safari engine, so the iOS version counts) and, below these versions, says that the browser is too old and what to do (the text is in the interface language, `app.browserTooOld` in `shared/src/i18n`). A browser it does not recognise gets no notice.
 
 ## The 21 blocks
 

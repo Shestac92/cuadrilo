@@ -20,7 +20,7 @@ Components are in `client/src/exercises/`; the lesson is assembled from them in 
 | `TrueFalseBlock` | statements with "Verdadero / Falso", checked on pressing |
 | `SequenceBlock` | order whole sentences or lines by dragging (keyboard works); one check button |
 
-Every answer is checked at once: right turns green and locks, wrong turns red and stays editable. When a whole element is green there is CSS confetti. The check runs in the browser (it is not an exam): case and extra spaces do not matter, diacritics do (`esta` ≠ `está`). Attempts are not counted. Dragging uses `exercises/placement.tsx`; the word bank stays pinned under the header while its exercise is on screen.
+Every answer is checked at once: right turns green and locks, wrong turns red and stays editable. When a whole element is green there is a short pure-CSS celebration (`Celebration` in `exercises/Exercise.tsx`, styles in `exercises.css`): confetti, fireworks, a comic-book word (`exercise.celebrationWords` in the i18n files), sparkles, balloons, falling glitter or a disco ball with beams of light, picked at random and never the same twice in a row. The system's reduced-motion setting is ignored on purpose. The check runs in the browser (it is not an exam): case and extra spaces do not matter, diacritics do (`esta` ≠ `está`). Attempts are not counted. Dragging uses `exercises/placement.tsx`; the word bank stays pinned under the header while its exercise is on screen.
 
 ## View modes
 

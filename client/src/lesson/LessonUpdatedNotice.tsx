@@ -30,7 +30,8 @@ export function LessonUpdatedNotice({ lessonId }: { lessonId: number }) {
   return (
     <Notification className="toast" color="orange" withCloseButton onClose={() => setUpdated(false)}>
       {t('lesson.updated')}
-      <Button size="compact-sm" color="orange" mt="xs" onClick={() => window.location.reload()}>
+      {/* A block of its own: an inline button would sit right after the text's last word. */}
+      <Button display="block" size="compact-sm" color="orange" mt="xs" onClick={() => window.location.reload()}>
         {t('lesson.reload')}
       </Button>
     </Notification>

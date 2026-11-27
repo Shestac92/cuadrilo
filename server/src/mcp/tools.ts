@@ -117,7 +117,8 @@ export function registerLessonTools(server: McpServer): void {
       title: 'Lesson format',
       description:
         'How lessons are built: chapters → exercises (a task + blocks) → blocks, every block type with an example. Read it before creating or changing lessons.',
-      annotations: { readOnlyHint: true },
+      inputSchema: {},
+      annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
     },
     async () => ({ content: [{ type: 'text', text: LESSON_FORMAT }] }),
   );
@@ -127,7 +128,8 @@ export function registerLessonTools(server: McpServer): void {
     {
       title: 'List lessons',
       description: 'All lessons of the platform, recently changed first.',
-      annotations: { readOnlyHint: true },
+      inputSchema: {},
+      annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
     },
     async () => {
       const lessons = db.listLessons().map((lesson) => {
@@ -152,7 +154,7 @@ export function registerLessonTools(server: McpServer): void {
       description:
         'A lesson with its chapters, numbered exercises and blocks, with their ids (needed to change or delete them). Media are shown by their library name.',
       inputSchema: { lessonId },
-      annotations: { readOnlyHint: true },
+      annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
     },
     async ({ lessonId: id }) => {
       const lesson = db.getLesson(id);
@@ -189,7 +191,7 @@ export function registerLessonTools(server: McpServer): void {
         kind: z.enum(['image', 'audio']).optional(),
         search: z.string().max(200).optional().describe('Part of the name'),
       },
-      annotations: { readOnlyHint: true },
+      annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
     },
     async ({ kind, search }) => {
       const needle = search?.trim().toLowerCase();
@@ -215,7 +217,7 @@ export function registerLessonTools(server: McpServer): void {
           .max(MEDIA_NAME_MAX)
           .describe('A short name with the extension, unique in the library ("tiempo-lluvia.jpg")'),
       },
-      annotations: { readOnlyHint: false, destructiveHint: false, openWorldHint: true },
+      annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: true, openWorldHint: true },
     },
     async ({ url, name }) => {
       const download = await fetchPublic(url, {
@@ -258,7 +260,7 @@ export function registerLessonTools(server: McpServer): void {
         title: z.string().trim().min(1).max(200),
         chapters: z.array(chapterInput).min(1).max(50),
       },
-      annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: false },
+      annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: false, openWorldHint: false },
     },
     async ({ title, chapters: inputs }) => {
       const problems = new Problems();
@@ -291,7 +293,7 @@ export function registerLessonTools(server: McpServer): void {
         newChapterTitle: z.string().max(200).optional().describe('Adds a new chapter at the end with this title'),
         exercises: z.array(exerciseInput).min(1).max(200),
       },
-      annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: false },
+      annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: false, openWorldHint: false },
     },
     async ({ lessonId: id, chapterId, newChapterTitle, exercises: inputs }) =>
       editLesson(id, (content) => {
@@ -334,7 +336,7 @@ export function registerLessonTools(server: McpServer): void {
         title: exerciseInput.shape.title.optional(),
         blocks: exerciseInput.shape.blocks.optional(),
       },
-      annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: true },
+      annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: true, openWorldHint: false },
     },
     async ({ lessonId: id, exerciseId, title, blocks }) =>
       editLesson(id, (content) => {
@@ -366,7 +368,7 @@ export function registerLessonTools(server: McpServer): void {
       title: 'Delete an exercise',
       description: "Deletes an exercise (the students' answers to it go too).",
       inputSchema: { lessonId, exerciseId: z.string() },
-      annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: true },
+      annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: true, openWorldHint: false },
     },
     async ({ lessonId: id, exerciseId }) =>
       editLesson(id, (content) => {
@@ -386,7 +388,7 @@ export function registerLessonTools(server: McpServer): void {
       title: 'Add a chapter',
       description: 'Adds an empty chapter at the end of a lesson (fill it with add_exercises).',
       inputSchema: { lessonId, title: z.string().max(200).optional() },
-      annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: false },
+      annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: false, openWorldHint: false },
     },
     async ({ lessonId: id, title }) =>
       editLesson(id, (content) => {
@@ -408,7 +410,7 @@ export function registerLessonTools(server: McpServer): void {
       title: 'Rename a chapter',
       description: 'Sets a chapter title (empty: "Capítulo N").',
       inputSchema: { lessonId, chapterId: z.string(), title: z.string().max(200) },
-      annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: true },
+      annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: true, openWorldHint: false },
     },
     async ({ lessonId: id, chapterId, title }) =>
       editLesson(id, (content) => {
@@ -426,7 +428,7 @@ export function registerLessonTools(server: McpServer): void {
       title: 'Delete a chapter',
       description: 'Deletes a chapter with all its exercises. A lesson keeps at least one chapter.',
       inputSchema: { lessonId, chapterId: z.string() },
-      annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: true },
+      annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: true, openWorldHint: false },
     },
     async ({ lessonId: id, chapterId }) =>
       editLesson(id, (content) => {
@@ -444,7 +446,7 @@ export function registerLessonTools(server: McpServer): void {
     {
       title: 'Rename a lesson',
       inputSchema: { lessonId, title: z.string().trim().min(1).max(200) },
-      annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: true },
+      annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: true, openWorldHint: false },
     },
     async ({ lessonId: id, title }) => {
       const renamed = db.renameLesson(id, title);

@@ -113,7 +113,7 @@ export function HotspotsBlock({
             style={{ left: `${miss.x * 100}%`, top: `${miss.y * 100}%` }}
           />
         )}
-        <Celebration active={!readOnly && done} />
+        <Celebration blockId={id} done={done} />
       </div>
       {caption && (
         <Text component="figcaption" size="sm" c="dimmed">

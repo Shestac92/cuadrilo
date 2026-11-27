@@ -142,7 +142,7 @@ export function WordsearchBlock({ id, grid, placements }: { id: string } & Props
           ))}
         </ul>
       </div>
-      <Celebration active={!readOnly && done} />
+      <Celebration blockId={id} done={done} />
     </div>
   );
 }

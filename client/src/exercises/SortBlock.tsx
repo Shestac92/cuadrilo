@@ -89,7 +89,7 @@ export function SortBlock({ id, groups }: { id: string; groups: Group[] }) {
           ))}
         </div>
       </PlacementArea>
-      <Celebration active={!readOnly && allCorrect} />
+      <Celebration blockId={id} done={allCorrect} />
     </div>
   );
 }

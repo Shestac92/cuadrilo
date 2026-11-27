@@ -67,7 +67,7 @@ export function TrueFalseBlock({ id, statements }: { id: string; statements: Sta
           </div>
         );
       })}
-      <Celebration active={!readOnly && states.every((s) => s === 'ok')} />
+      <Celebration blockId={id} done={states.every((s) => s === 'ok')} />
     </div>
   );
 }

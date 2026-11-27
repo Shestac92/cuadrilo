@@ -119,7 +119,7 @@ export function ChoiceBlock({ id, questions }: { id: string; questions: Question
           </fieldset>
         );
       })}
-      <Celebration active={!readOnly && states.every((s) => s === 'ok')} />
+      <Celebration blockId={id} done={states.every((s) => s === 'ok')} />
     </div>
   );
 }

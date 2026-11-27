@@ -196,7 +196,7 @@ export function BuildWordBlock({ id, words }: { id: string; words: { text: strin
           );
         })}
       </PlacementArea>
-      <Celebration active={!readOnly && current.every((word) => word.result === 'ok')} />
+      <Celebration blockId={id} done={current.every((word) => word.result === 'ok')} />
     </div>
   );
 }

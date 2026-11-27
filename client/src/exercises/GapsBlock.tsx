@@ -97,7 +97,7 @@ export function GapsBlock({ id, text }: { id: string; text: string }) {
           })}
         </p>
       ))}
-      <Celebration active={!readOnly && state.states.every((s) => s === 'ok')} />
+      <Celebration blockId={id} done={state.states.every((s) => s === 'ok')} />
     </div>
   );
 }

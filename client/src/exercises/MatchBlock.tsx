@@ -63,7 +63,7 @@ export function MatchBlock({ id, pairs, distractors = [] }: { id: string; pairs:
           <WordBank placement={placement} vertical distractorIds={teacherView ? distractorIds : undefined} />
         </div>
       </PlacementArea>
-      <Celebration active={!readOnly && placement.allCorrect} />
+      <Celebration blockId={id} done={placement.allCorrect} />
     </div>
   );
 }

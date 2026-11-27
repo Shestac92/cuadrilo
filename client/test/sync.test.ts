@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
 
 import { forgetSolution } from '../src/exercises/savedState';
-import { createSender, type SendState } from '../src/exercises/sync';
+import { createBlockStore, createSender, type SendState } from '../src/exercises/sync';
 
 /**
  * The student's answer sender (src/exercises/sync.tsx): at most one request
@@ -120,5 +120,18 @@ describe('answers saved with "Mostrar solución"', () => {
     assert.deepEqual(forgetSolution({ words: [], placed: ['w1'], solution: true }), { words: [], placed: ['w1'] });
     assert.deepEqual(forgetSolution({ text: 'Hola', sent: false }), { text: 'Hola', sent: false });
     assert.equal(forgetSolution(null), null);
+  });
+});
+
+describe("the teacher's store of a student's states", () => {
+  it('tells a live state (the student answering now) from one loaded with the page', () => {
+    const store = createBlockStore({ a: { x: 1 } });
+    assert.equal(store.isLive('a'), false);
+    store.set('a', { x: 2 }, true);
+    assert.equal(store.isLive('a'), true);
+    assert.equal(store.isLive('b'), false);
+    // A reload of the saved states is not live.
+    store.set('a', { x: 2 });
+    assert.equal(store.isLive('a'), false);
   });
 });

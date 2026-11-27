@@ -1,5 +1,6 @@
-import { type CSSProperties, type ReactNode, useState } from 'react';
+import { type CSSProperties, type ReactNode, useEffect, useRef, useState } from 'react';
 import { t } from '../i18n';
+import { useWatchedStore } from './sync';
 
 /** One exercise of a lesson: number, the task ("Completa los huecos") and its elements. */
 export function Exercise({
@@ -75,13 +76,25 @@ const DECOR_COLORS = ['#2f6fed', '#f59f00', '#2f9e44', '#e64980', '#7048e8', '#1
 /**
  * Pure-CSS celebration over the element when all its answers are correct
  * (exercises.css): confetti, fireworks, a comic-book word, sparkles,
- * balloons, falling glitter or a disco ball,
- * picked at random and never the same twice in a row. Mounted once,
- * plays once (also with the system's reduced-motion setting). Only for the student answering: not
- * on the teacher's read-only view.
+ * balloons, falling glitter or a disco ball, picked at random and never the
+ * same twice in a row. Mounted once, plays once (also with the system's
+ * reduced-motion setting). The student answering sees it when the element is
+ * done; the teacher watching a student only when that student completes it
+ * live, not for answers loaded with the page or on switching students.
  */
-export function Celebration({ active }: { active: boolean }) {
-  return active ? <CelebrationShow /> : null;
+export function Celebration({ blockId, done }: { blockId: string; done: boolean }) {
+  const watched = useWatchedStore();
+  const [played, setPlayed] = useState(false);
+  const before = useRef({ watched, done });
+  useEffect(() => {
+    const was = before.current;
+    before.current = { watched, done };
+    if (!watched) return;
+    if (!done) setPlayed(false);
+    else if (!was.done && was.watched === watched && watched.isLive(blockId)) setPlayed(true);
+  }, [watched, done, blockId]);
+  if (watched === undefined) return done ? <CelebrationShow /> : null;
+  return done && played ? <CelebrationShow /> : null;
 }
 
 function CelebrationShow() {

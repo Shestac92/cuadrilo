@@ -1690,10 +1690,10 @@
   border-radius: 50%;
   background: radial-gradient(circle, #fff 0 15%, var(--c) 40%, transparent 70%);
   opacity: 0;
-  animation: ex-flash 0.45s ease-out calc(var(--delay) + 0.5s) forwards;
+  animation: ex-firework-flash 0.45s ease-out calc(var(--delay) + 0.5s) forwards;
 }
 
-@keyframes ex-flash {
+@keyframes ex-firework-flash {
   0% {
     opacity: 1;
     transform: scale(0.3);

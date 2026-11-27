@@ -71,7 +71,7 @@ export function DropdownGapsBlock({ id, text }: { id: string; text: string }) {
           })}
         </p>
       ))}
-      <Celebration active={!readOnly && gapCount > 0 && state.states.every((s) => s === 'ok')} />
+      <Celebration blockId={id} done={gapCount > 0 && state.states.every((s) => s === 'ok')} />
     </div>
   );
 }

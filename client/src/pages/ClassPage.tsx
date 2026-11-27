@@ -503,7 +503,8 @@ function useStudentAnswers(
   // Live answers of everyone in the class.
   useEffect(() => {
     if (!socket) return;
-    const onAnswer = (event: AnswerEvent) => storeOf(event.studentId).set(event.blockId, event.state);
+    // Live: the teacher sees the celebration when the student completes an element now.
+    const onAnswer = (event: AnswerEvent) => storeOf(event.studentId).set(event.blockId, event.state, true);
     socket.on('answer', onAnswer);
     return () => {
       socket.off('answer', onAnswer);

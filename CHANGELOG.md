@@ -6,7 +6,7 @@ All notable changes to Cuadrilo are written here. The format follows [Keep a Cha
 
 ### Added
 
-- More celebrations when an exercise is all correct: besides the confetti, fireworks, a comic-book word, sparkles, balloons, falling glitter and a disco ball, one picked at random each time (never the same twice in a row). All pure CSS.
+- More celebrations when an exercise is all correct: besides the confetti, fireworks, a comic-book word, sparkles, balloons, falling glitter and a disco ball, one picked at random each time (never the same twice in a row). All pure CSS. The teacher sees it too on the class page when the student they watch completes an exercise.
 
 ### Changed
 

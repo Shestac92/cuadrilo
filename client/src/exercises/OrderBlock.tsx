@@ -138,7 +138,7 @@ export function OrderBlock({ id, sentences }: { id: string; sentences: { text: s
           </div>
         );
       })}
-      <Celebration active={!readOnly && states.every((s) => s === 'ok')} />
+      <Celebration blockId={id} done={states.every((s) => s === 'ok')} />
     </div>
   );
 }

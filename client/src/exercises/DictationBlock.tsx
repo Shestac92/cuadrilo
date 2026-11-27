@@ -177,7 +177,7 @@ export function DictationBlock({ id, sentences }: { id: string; sentences: Sente
           </div>
         );
       })}
-      <Celebration active={!readOnly && allRight} />
+      <Celebration blockId={id} done={allRight} />
     </div>
   );
 }

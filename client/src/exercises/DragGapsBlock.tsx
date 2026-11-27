@@ -59,7 +59,7 @@ export function DragGapsBlock({ id, text, distractors = [] }: { id: string; text
           ))}
         </div>
       </PlacementArea>
-      <Celebration active={!readOnly && placement.allCorrect} />
+      <Celebration blockId={id} done={placement.allCorrect} />
     </div>
   );
 }

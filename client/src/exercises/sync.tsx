@@ -38,6 +38,8 @@ type Report = (blockId: string, state: unknown, throttleMs: number) => void;
 interface BlockStore {
   get: (blockId: string) => unknown;
   subscribe: (blockId: string, onChange: () => void) => () => void;
+  /** The block's latest state came live (the student answering now), not loaded with the page. */
+  isLive: (blockId: string) => boolean;
 }
 
 interface SyncContextValue {
@@ -99,6 +101,17 @@ export function useBlockState<S>(
 
   if (teacherView) return [remote ?? fallback, () => {}, true, remote !== undefined];
   return [local, setLocal, false, true];
+}
+
+/**
+ * Who sees the block: undefined for the student answering (and outside any sync); for the teacher, the store of the
+ * student they watch (TeacherSync), or null where there is none (the lesson's view "with answers").
+ */
+export function useWatchedStore(): BlockStore | null | undefined {
+  const sync = useContext(SyncContext);
+  const viewMode = useViewMode();
+  if (sync?.mode === 'teacher') return sync.store ?? null;
+  return viewMode === 'teacher' ? null : undefined;
 }
 
 // ----- student -----
@@ -239,12 +252,17 @@ export function StudentSync({
 export function createBlockStore(initial: Record<string, unknown>) {
   const states = new Map(Object.entries(initial).map(([blockId, state]) => [blockId, forgetSolution(state)]));
   const listeners = new Map<string, Set<() => void>>();
+  const live = new Set<string>();
   return {
     get: (blockId: string) => states.get(blockId),
-    set: (blockId: string, state: unknown) => {
+    /** `isLive`: the student sent it now (socket), not loaded with the page. */
+    set: (blockId: string, state: unknown, isLive = false) => {
       states.set(blockId, forgetSolution(state));
+      if (isLive) live.add(blockId);
+      else live.delete(blockId);
       for (const listener of listeners.get(blockId) ?? []) listener();
     },
+    isLive: (blockId: string) => live.has(blockId),
     subscribe: (blockId: string, onChange: () => void) => {
       getOrCreate(listeners, blockId, () => new Set()).add(onChange);
       return () => listeners.get(blockId)?.delete(onChange);

@@ -95,7 +95,7 @@ export function SequenceBlock({ id, items }: { id: string; items: string[] }) {
           </Tooltip>
         )}
       </div>
-      <Celebration active={!readOnly && state === 'ok'} />
+      <Celebration blockId={id} done={state === 'ok'} />
     </div>
   );
 }

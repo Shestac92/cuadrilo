@@ -1,4 +1,6 @@
+import path from 'node:path';
 import type { AppConfig } from '@cuadrilo/shared/api';
+
 import express, { type NextFunction, type Request, type Response } from 'express';
 
 import { answersRouter } from './answers';
@@ -22,6 +24,13 @@ import { getSettings, settingsRouter } from './settings';
 import { studentsRouter } from './students';
 
 const PORT = Number(process.env.PORT ?? 8080);
+/** The interface to listen on; not set: all of them (as before). The desktop app sets 127.0.0.1. */
+const HOST = process.env.HOST || undefined;
+/**
+ * The built client (client/dist) to serve as well, for the desktop app only: on a server Caddy serves it
+ * (deploy/Caddyfile) and in development Vite. Not set: the server answers the API only.
+ */
+const CLIENT_DIR = process.env.CLIENT_DIR ? path.resolve(process.env.CLIENT_DIR) : undefined;
 
 function main(): void {
   // Files stored before the media library existed get a record (and a name).
@@ -87,6 +96,18 @@ function main(): void {
 
   app.use('/api', (_req, res) => sendError(res, 'not_found', t('errors.notFound')));
 
+  // The desktop app: the client's files, and index.html for the app's own routes (/lessons/1…).
+  if (CLIENT_DIR) {
+    const indexHtml = path.join(CLIENT_DIR, 'index.html');
+    // Vite's file names carry a hash of the content: they never change.
+    app.use('/assets', express.static(path.join(CLIENT_DIR, 'assets'), { immutable: true, maxAge: '1y' }));
+    app.use(express.static(CLIENT_DIR, { index: false }));
+    app.get(/.*/, (_req, res) => {
+      res.set('Cache-Control', 'no-cache');
+      res.sendFile(indexHtml);
+    });
+  }
+
   // Errors thrown by handlers and by express.json() (body too large or not JSON).
   // Internal details are logged, not sent.
   app.use((err: Error & { type?: string }, _req: Request, res: Response, _next: NextFunction) => {
@@ -100,7 +121,7 @@ function main(): void {
 
   // Express 5 gives a failed listen (a busy port) to the callback instead of throwing: without a check the
   // process would say "listening" and then quietly exit.
-  const server = app.listen(PORT, (error?: Error & { code?: string }) => {
+  const onListen = (error?: Error & { code?: string }) => {
     if (error) {
       console.error(
         error.code === 'EADDRINUSE'
@@ -109,8 +130,9 @@ function main(): void {
       );
       process.exit(1);
     }
-    console.log(`API server listening on http://localhost:${PORT}`);
-  });
+    console.log(`API server listening on http://${HOST ?? 'localhost'}:${PORT}`);
+  };
+  const server = HOST ? app.listen(PORT, HOST, onListen) : app.listen(PORT, onListen);
   // Live events for teachers (socket.io on the same port, path /socket.io).
   attachRealtime(server);
 }

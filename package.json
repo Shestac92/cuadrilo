@@ -33,7 +33,8 @@
   "workspaces": [
     "shared",
     "server",
-    "client"
+    "client",
+    "desktop"
   ],
   "engines": {
     "node": ">=22.13.0"
@@ -42,7 +43,7 @@
   "scripts": {
     "dev": "concurrently -k -n server,client -c blue,green \"npm run dev -w server\" \"npm run dev -w client\"",
     "share": "npm run build -w client && concurrently -k -n server,client -c blue,green \"npm start -w server\" \"npm run preview -w client\"",
-    "typecheck": "npm run typecheck -w shared && npm run typecheck -w server && npm run typecheck -w client",
+    "typecheck": "npm run typecheck -w shared && npm run typecheck -w server && npm run typecheck -w client && npm run typecheck -w desktop",
     "test": "npm test -w server && npm test -w client",
     "lint": "biome check .",
     "format": "biome check --write ."

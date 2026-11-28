@@ -45,6 +45,9 @@ import { wheelStore } from './wheelStore';
  * Homework (sent by the API after a change, see homework.ts)
  * Server → student / teachers:  homework HomeworkEvent, homeworkDeleted { id }
  *
+ * The platform's settings (sent by the API after a teacher changed them, see settings.ts)
+ * Server → everyone:  settings AppSettings (the theme then changes on every open page, without a reload)
+ *
  * Presence lives in memory only; everything else is in the database.
  */
 
@@ -72,6 +75,11 @@ export function emitToStudent(studentId: number, event: string, payload: unknown
 /** An event to all the open pages of every teacher. */
 export function emitToTeachers(event: string, payload: unknown): void {
   namespace?.to(TEACHERS_ROOM).emit(event, payload);
+}
+
+/** An event to every open page of everyone signed in. */
+export function emitToEveryone(event: string, payload: unknown): void {
+  namespace?.emit(event, payload);
 }
 
 /** What a student is told about their class. */

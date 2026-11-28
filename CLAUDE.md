@@ -1,6 +1,6 @@
 # Cuadrilo
 
-npm-workspaces monorepo: `shared` (lesson format, API contract, i18n), `server` (Express 5, `node:sqlite`), `client` (React 19, Mantine 9, Vite). Details are in README.md and `docs/` (one file per topic); keep them in step with code changes.
+npm-workspaces monorepo: `shared` (lesson format, API contract, i18n), `server` (Express 5, `node:sqlite`), `client` (React 19, Mantine 9, Vite), `desktop` (Electron demo app, docs/desktop.md). Details are in README.md and `docs/` (one file per topic); keep them in step with code changes.
 
 ## Commands
 
@@ -25,7 +25,7 @@ npm-workspaces monorepo: `shared` (lesson format, API contract, i18n), `server` 
 - Never run anything on the user's real servers: the user does it themselves, and you write the commands.
 - Third-party passwords are never typed by the agent: the user signs in themselves.
 
-- The backend serves only the API; the client (`client/dist`) is served by Vite (`dev`, `share`) or by Caddy (servers), and each forwards the same list of backend paths (`proxyRoutes` in `client/vite.config.ts`, `@backend` in `deploy/Caddyfile`): a new backend path goes into both.
+- The backend serves only the API (except in the desktop app, which sets `CLIENT_DIR`); the client (`client/dist`) is served by Vite (`dev`, `share`) or by Caddy (servers), and each forwards the same list of backend paths (`proxyRoutes` in `client/vite.config.ts`, `@backend` in `deploy/Caddyfile`): a new backend path goes into both.
 - On a server everything is in one folder, `/opt/cuadrilo`: the code, `.env` and the data (`data/`, `DATA_DIR`). One platform per server, one process per data folder. `deploy/INSTALL.md` is the step-by-step guide (install, backup and restore, update); `deploy/Caddyfile` and `deploy/cuadrilo.service` must stay in step with it and with each other (paths, port 8080 = `PORT`).
 - The branding settings (`APP_LANG`, `PLATFORM_NAME`, `FAVICON`, the privacy-policy values) are baked into the client when it is built: a change needs `npm run build -w client` and a restart. A client-side setting goes into `.env.example`, the README table and the install guide.
 

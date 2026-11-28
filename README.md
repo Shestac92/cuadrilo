@@ -8,6 +8,8 @@
 ![Node.js 22.13+](https://img.shields.io/badge/node-%3E%3D22.13-339933)
 [![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-support-FFDD00?logo=buymeacoffee&logoColor=black)](https://buymeacoffee.com/shestac92)
 
+**Try the demo on your computer:** the teacher and a student side by side in one window, no server, no account. [macOS, Apple silicon](https://github.com/Shestac92/cuadrilo/releases/latest/download/Cuadrilo-Demo-App-mac-arm64.dmg) · [macOS, Intel](https://github.com/Shestac92/cuadrilo/releases/latest/download/Cuadrilo-Demo-App-mac-x64.dmg) · [Windows](https://github.com/Shestac92/cuadrilo/releases/latest/download/Cuadrilo-Demo-App-win-x64-setup.exe) ([portable](https://github.com/Shestac92/cuadrilo/releases/latest/download/Cuadrilo-Demo-App-win-x64-portable.exe)). Not signed: the first time, macOS needs System Settings → Privacy & Security → Open Anyway, and Windows SmartScreen More info → Run anyway. More in [Desktop demo app](docs/desktop.md).
+
 ![The teacher's live class page: a sort exercise with the student's answers marked green and red, the students online and a shared board](docs/images/live-class.webp)
 
 ## Features
@@ -99,7 +101,7 @@ Fields and examples: [Lessons and the editor](docs/lessons.md).
 
 ## Documentation
 
-[Why Cuadrilo](docs/why.md) · [From your computer](docs/share-from-your-computer.md) · [Configuration](docs/configuration.md) · [Lessons](docs/lessons.md) · [Exercises](docs/exercises.md) · [Classes](docs/classes.md) · [Answers and homework](docs/answers-and-homework.md) · [Roles and access](docs/roles-and-access.md) · [Translator](docs/translator.md) · [AI assistants](docs/ai-assistants.md) · [Security](docs/security.md) · [API](docs/api.md) · [Architecture](docs/architecture.md) · [Development](docs/development.md) · [Install on a server](deploy/INSTALL.md)
+[Why Cuadrilo](docs/why.md) · [From your computer](docs/share-from-your-computer.md) · [Configuration](docs/configuration.md) · [Lessons](docs/lessons.md) · [Exercises](docs/exercises.md) · [Classes](docs/classes.md) · [Answers and homework](docs/answers-and-homework.md) · [Roles and access](docs/roles-and-access.md) · [Translator](docs/translator.md) · [AI assistants](docs/ai-assistants.md) · [Security](docs/security.md) · [API](docs/api.md) · [Architecture](docs/architecture.md) · [Development](docs/development.md) · [Desktop demo app](docs/desktop.md) · [Install on a server](deploy/INSTALL.md)
 
 ## Contributing
 

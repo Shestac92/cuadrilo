@@ -5,6 +5,7 @@ import { Router } from 'express';
 import { requireTeacher } from './auth';
 import * as db from './db';
 import { parseBody, wrap } from './http';
+import { emitToEveryone } from './live';
 
 /**
  * The platform's settings: the same for everyone, kept in the table app_settings
@@ -29,14 +30,17 @@ export function settingsRouter(): Router {
     }),
   );
 
-  // Only the settings sent change.
+  // Only the settings sent change. Every open page learns the new settings at once (the theme changes
+  // there without a reload).
   router.patch(
     '/',
     wrap((req, res) => {
       const input = parseBody(updateSettingsInput, req, res);
       if (!input) return;
       if (input.theme !== undefined) db.setSetting('theme', input.theme);
-      res.json(getSettings());
+      const settings = getSettings();
+      emitToEveryone('settings', settings);
+      res.json(settings);
     }),
   );
 

@@ -1,8 +1,9 @@
-import type { HomeworkDeletedEvent, HomeworkEvent, StudentClass } from '@cuadrilo/shared/api';
+import type { AppSettings, HomeworkDeletedEvent, HomeworkEvent, StudentClass } from '@cuadrilo/shared/api';
 import { createContext, type ReactNode, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { io, type Socket } from 'socket.io-client';
 
 import { api, type Homework } from './api';
+import { loadConfig, updateConfig } from './config';
 import { noticesAfterEvent, replaceOrAddHomework } from './homeworkList';
 
 /**
@@ -14,6 +15,7 @@ import { noticesAfterEvent, replaceOrAddHomework } from './homeworkList';
  *   loaded on (re)connect and kept up to date by the homework events, so pages
  *   and the nav counters read it instead of fetching it each;
  * - the changes worth telling stay as notices until closed (components/LiveNotices);
+ * - the platform's settings a teacher changes reach every page here (the theme changes without a reload);
  * - the teacher's class page and the student's lesson page use the same socket.
  */
 
@@ -63,6 +65,11 @@ export function LiveProvider({ children }: { children: ReactNode }) {
       );
     });
     socket.on('disconnect', () => setConnected(false));
+    // After a lost connection: a change of the settings may have been missed meanwhile.
+    socket.io.on('reconnect', () => {
+      loadConfig().catch(() => undefined);
+    });
+    socket.on('settings', (settings: AppSettings) => updateConfig(settings));
     socket.on('class', (nextClass: StudentClass | null) => {
       setStudentClass(nextClass);
       // A call to a lesson that is no longer the class's is stale.

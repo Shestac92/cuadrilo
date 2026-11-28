@@ -1,0 +1,23 @@
+{
+  "name": "desktop",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Cuadrilo Demo App: the platform with a demo database, teacher and student side by side, on the user's own computer",
+  "main": "build/main.cjs",
+  "scripts": {
+    "build": "tsx scripts/build.ts",
+    "start": "electron .",
+    "package": "tsx scripts/package.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "sharp": "0.35.5"
+  },
+  "devDependencies": {
+    "electron": "45.5.0",
+    "electron-builder": "26.18.0",
+    "esbuild": "0.28.2",
+    "tsx": "4.23.15",
+    "typescript": "5.9.3"
+  }
+}

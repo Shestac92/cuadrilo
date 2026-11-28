@@ -36,7 +36,7 @@ The `/live` socket and its events: `shared/src/api.ts` and [Classes](classes.md)
 | GET | `/api/students/:id/export` | teacher | → a JSON file (`attachment`, `<login>-data.json`) with all the student's data: account, lesson access, homework, answers, teacher's comments and highlights, vocabulary, groups, classes, their board lines. No password or tokens. |
 | DELETE | `/api/students/:id` | teacher | → 204; deletes all the student's data (cascade) |
 | GET | `/api/settings` | teacher | → `AppSettings` `{theme}` (the same values come with the public `GET /api/config`) |
-| PATCH | `/api/settings` | teacher | `{theme?}` → `AppSettings`; only the fields sent change; an unknown theme is 400 |
+| PATCH | `/api/settings` | teacher | `{theme?}` → `AppSettings`; only the fields sent change; an unknown theme is 400. Every open page gets the `settings` event (`/live`) with the new `AppSettings` |
 | GET | `/api/groups` | teacher | → `StudentGroup[]` `{id, name, studentIds, createdAt}`, by name |
 | POST | `/api/groups` | teacher | `{name, studentIds?}` → 201 `StudentGroup`; a taken name is 409 `name_taken` |
 | PATCH | `/api/groups/:id` | teacher | `{name?, studentIds?}` → `StudentGroup`; the members, when given, are replaced as a whole |

@@ -66,6 +66,7 @@ export async function startServer({
   lang = 'es',
   translationLang = dictionary ? 'ru' : undefined,
   prepare,
+  serverEnv,
 }: {
   /** Writes the test dictionary (a test pair of languages) into the temporary dictionaries folder. */
   dictionary?: boolean;
@@ -74,6 +75,8 @@ export async function startServer({
   translationLang?: string;
   /** Runs on the data folder after seeding, before the server starts (state left by an older version). */
   prepare?: (dataDir: string) => void;
+  /** More environment for the server process (e.g. the desktop app's CLIENT_DIR). */
+  serverEnv?: NodeJS.ProcessEnv;
 } = {}): Promise<TestServer> {
   const dataDir = fs.mkdtempSync(path.join(os.tmpdir(), 'test-'));
   const dictionariesDir = fs.mkdtempSync(path.join(os.tmpdir(), 'dictionaries-'));
@@ -99,6 +102,7 @@ export async function startServer({
       // OAuth: the issuer and the MCP resource are this server; client documents (CIMD) may be local.
       PUBLIC_URL: `http://127.0.0.1:${port}`,
       ALLOW_LOCAL_FETCH: '1',
+      ...serverEnv,
     },
   });
   let log = '';

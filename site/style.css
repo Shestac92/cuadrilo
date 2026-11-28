@@ -188,6 +188,156 @@ nav.menu a:hover {
   gap: 12px;
   margin-top: 28px;
 }
+.actions.secondary {
+  margin-top: 0;
+}
+.btn.small {
+  padding: 8px 14px;
+  font-size: 0.95rem;
+}
+nav.menu a.btn.primary,
+nav.menu a.btn.primary:hover {
+  color: var(--accent-text);
+}
+
+/* The demo app: the main call to action, the first thing a visitor should see. */
+.cta {
+  display: grid;
+  gap: 14px;
+  justify-items: start;
+}
+.btn.huge {
+  gap: 16px;
+  padding: 20px 34px 20px 26px;
+  border-radius: 16px;
+  font-size: 1.35rem;
+  line-height: 1.2;
+  box-shadow:
+    0 10px 30px color-mix(in srgb, var(--accent) 40%, transparent),
+    0 0 0 6px color-mix(in srgb, var(--accent) 16%, transparent);
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+}
+.btn.huge:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 14px 36px color-mix(in srgb, var(--accent) 50%, transparent),
+    0 0 0 8px color-mix(in srgb, var(--accent) 20%, transparent);
+}
+.btn.huge .sub {
+  display: block;
+  margin-top: 3px;
+  font-size: 0.92rem;
+  font-weight: 500;
+  opacity: 0.88;
+}
+.btn.huge .icon {
+  width: 30px;
+  height: 30px;
+  flex: none;
+}
+/* A light that runs across the button every few seconds. */
+.shine {
+  position: relative;
+  overflow: hidden;
+}
+.shine::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 35%, rgb(255 255 255 / 45%) 50%, transparent 65%);
+  transform: translateX(-120%);
+  animation: shine 4.5s ease-in-out 1s infinite;
+  pointer-events: none;
+}
+@keyframes shine {
+  0% {
+    transform: translateX(-120%);
+  }
+  30%,
+  100% {
+    transform: translateX(120%);
+  }
+}
+.cta-note {
+  color: var(--muted);
+  font-size: 0.97rem;
+  max-width: 62ch;
+}
+section.demo-band {
+  background: linear-gradient(180deg, var(--accent-soft), var(--bg) 85%);
+  border-top: 1px solid var(--line);
+}
+.downloads {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+.download {
+  position: relative;
+  display: grid;
+  gap: 4px;
+  align-content: start;
+  padding: 24px;
+  border: 2px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--card);
+  box-shadow: var(--shadow);
+  color: var(--text);
+  text-decoration: none;
+  transition:
+    transform 0.15s ease,
+    border-color 0.15s ease;
+}
+.download:hover {
+  transform: translateY(-3px);
+  border-color: var(--accent);
+}
+.download .os {
+  color: var(--accent);
+  font-weight: 600;
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.download strong {
+  font-size: 1.35rem;
+}
+.download .file {
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+.download .btn {
+  justify-self: start;
+  margin-top: 14px;
+}
+/* The visitor's own system (app.js). */
+.download.mine {
+  border-color: var(--accent);
+  box-shadow: 0 10px 30px color-mix(in srgb, var(--accent) 25%, transparent);
+}
+.download.mine::before {
+  content: "Your system";
+  position: absolute;
+  top: -13px;
+  left: 20px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--accent-text);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+.no-break {
+  white-space: nowrap;
+}
+.downloads-more {
+  margin-top: 16px;
+}
+.first-run {
+  margin-top: 28px;
+}
 
 /* Hero */
 .hero {
@@ -463,14 +613,132 @@ footer nav {
   gap: 6px 20px;
 }
 
+/* Before a download of the demo: how to open it the first time (app.js). */
+dialog#first-run {
+  width: min(620px, calc(100% - 32px));
+  max-height: calc(100% - 32px);
+  padding: 34px 34px 28px;
+  border: 0;
+  border-radius: 20px;
+  background: var(--card);
+  color: var(--text);
+  box-shadow: 0 30px 80px rgb(0 0 0 / 35%);
+}
+dialog#first-run[open] {
+  animation: dialog-in 0.22s ease-out;
+}
+dialog#first-run::backdrop {
+  background: rgb(8 20 16 / 55%);
+  backdrop-filter: blur(3px);
+}
+@keyframes dialog-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.97);
+  }
+}
+.dialog-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+}
+.dialog-close button {
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--muted);
+  font-size: 1.6rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.dialog-close button:hover {
+  background: var(--bg-soft);
+  color: var(--text);
+}
+.first-run-os {
+  display: none;
+  gap: 14px;
+}
+dialog[data-os="mac"] .first-run-os[data-for="mac"],
+dialog[data-os="win"] .first-run-os[data-for="win"] {
+  display: grid;
+}
+dialog[data-portable="true"] .setup-only,
+dialog[data-portable="false"] .portable-only {
+  display: none;
+}
+.first-run-os h2 {
+  font-size: 1.5rem;
+  padding-right: 24px;
+}
+.first-run-os .why {
+  color: var(--muted);
+}
+.first-run-steps {
+  counter-reset: step;
+  list-style: none;
+  margin: 6px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 14px;
+}
+.first-run-steps li {
+  counter-increment: step;
+  position: relative;
+  padding: 3px 0 0 48px;
+  min-height: 34px;
+}
+.first-run-steps li::before {
+  content: counter(step);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--accent-text);
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+}
+.dialog-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 26px;
+}
+.dialog-actions .btn {
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+dialog#first-run .again {
+  display: none;
+  margin-top: 14px;
+}
+dialog#first-run.started .again {
+  display: block;
+}
+dialog#first-run.started #first-run-cancel {
+  display: none;
+}
+
 @media (max-width: 820px) {
   section {
     padding: 52px 0;
   }
   .grid.three,
   .grid.two,
-  .demo {
+  .demo,
+  .downloads {
     grid-template-columns: 1fr;
+  }
+  .btn.huge {
+    font-size: 1.15rem;
+    padding: 16px 22px;
   }
   nav.menu a.hide-sm {
     display: none;

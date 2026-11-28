@@ -24,13 +24,14 @@
       <nav class="menu" aria-label="Main">
         <a class="hide-sm" href="#why">Why</a>
         <a class="hide-sm" href="#blocks">Blocks</a>
-        <a class="hide-sm" href="#try">Try it</a>
+        <a class="hide-sm" href="#try">See it</a>
         <a class="hide-sm" href="#ai">AI</a>
         <a href="#install">Install</a>
         <a class="hide-sm" href="#help">Help</a>
         <a class="hide-sm" href="#author">Author</a>
         <a class="hide-sm" href="#kudos">Kudos</a>
-        <a class="btn" href="https://github.com/Shestac92/cuadrilo">GitHub</a>
+        <a class="hide-sm" href="https://github.com/Shestac92/cuadrilo">GitHub</a>
+        <a class="btn primary small" href="#demo">Try the demo</a>
       </nav>
     </div>
   </header>
@@ -43,11 +44,60 @@
           <h1>Lessons your students can <em>do</em>, not only read.</h1>
         </div>
         <p class="lead">Build a lesson from blocks, teach it live, give homework and watch the answers arrive. Free for teachers and students, no plans and no pricing. It runs on your own server.</p>
-        <div class="actions">
-          <a class="btn primary" href="https://github.com/Shestac92/cuadrilo">View on GitHub</a>
+        <!-- The demo app first: what most visitors come for. app.js points the button at the visitor's system. -->
+        <div class="cta">
+          <a class="btn primary huge shine" id="demo-main" href="#demo">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0-5-5m5 5 5-5M4 19h16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span><span id="demo-main-label">Try the demo</span><small class="sub" id="demo-main-sub">for macOS and Windows</small></span>
+          </a>
+          <p class="cta-note">Free · no account · no server. The teacher and a student side by side on your own computer: play a live class alone. <a href="#demo" id="demo-other">Other systems</a></p>
+        </div>
+        <div class="actions secondary">
+          <a class="btn" href="https://github.com/Shestac92/cuadrilo">View on GitHub</a>
           <a class="btn" href="#install">How to install it</a>
         </div>
         <img class="shot-img" src="images/live-class.webp" alt="The teacher's live class page: a sort exercise with the student's answers marked green and red, the students online and a shared board" width="2000" height="929">
+      </div>
+    </section>
+
+    <section id="demo" class="demo-band">
+      <div class="wrap">
+        <div class="head">
+          <p class="eyebrow">Try the demo</p>
+          <h2>The whole platform on your computer, in a minute</h2>
+          <p class="lead">One window: the teacher on the left, a student on the right. Start a class, answer as the student and watch the answers arrive on the teacher's side. Nothing to set up, nothing leaves your computer.</p>
+        </div>
+        <div class="downloads">
+          <a class="download" data-os="mac-arm64" href="https://github.com/Shestac92/cuadrilo/releases/latest/download/Cuadrilo-Demo-App-mac-arm64.dmg">
+            <span class="os">macOS</span>
+            <strong>Apple silicon</strong>
+            <span class="file">M1 and newer · .dmg</span>
+            <span class="btn primary">Download</span>
+          </a>
+          <a class="download" data-os="mac-x64" href="https://github.com/Shestac92/cuadrilo/releases/latest/download/Cuadrilo-Demo-App-mac-x64.dmg">
+            <span class="os">macOS</span>
+            <strong>Intel</strong>
+            <span class="file">Macs before 2020 · .dmg</span>
+            <span class="btn primary">Download</span>
+          </a>
+          <a class="download" data-os="win-x64" href="https://github.com/Shestac92/cuadrilo/releases/latest/download/Cuadrilo-Demo-App-win-x64-setup.exe">
+            <span class="os">Windows</span>
+            <strong>Windows 10 and 11</strong>
+            <span class="file">Installer · .exe · <span class="no-break">no administrator</span></span>
+            <span class="btn primary">Download</span>
+          </a>
+        </div>
+        <p class="hint downloads-more">Rather not install it on Windows? <a class="download-link" data-os="win-x64" data-portable="true" href="https://github.com/Shestac92/cuadrilo/releases/latest/download/Cuadrilo-Demo-App-win-x64-portable.exe">The portable version</a> runs as it is. Not sure which Mac you have? Apple menu → About This Mac: “Chip Apple M…” is Apple silicon. All versions: <a href="https://github.com/Shestac92/cuadrilo/releases">releases on GitHub</a>.</p>
+        <div class="grid two first-run">
+          <div class="card">
+            <h3>First start on a Mac</h3>
+            <p>The app is free and not signed by Apple, so macOS asks once. Open it, then go to <strong>System Settings → Privacy &amp; Security</strong> and click <strong>Open Anyway</strong>.</p>
+          </div>
+          <div class="card">
+            <h3>First start on Windows</h3>
+            <p>Windows SmartScreen may warn about an unknown app. Click <strong>More info → Run anyway</strong>. It installs for you only, without an administrator.</p>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -262,6 +312,37 @@ npm run create-teacher -w server -- teacher</code></pre>
       </div>
     </section>
   </main>
+
+  <!-- Before a download of the demo (app.js): how to open the app the first time, then the download. -->
+  <dialog id="first-run" aria-labelledby="first-run-title">
+    <form method="dialog" class="dialog-close"><button type="submit" aria-label="Close">×</button></form>
+    <p class="eyebrow" id="first-run-state">Before you download</p>
+    <div class="first-run-os" data-for="mac">
+      <h2 id="first-run-title">One extra step the first time on a Mac</h2>
+      <p class="why">The demo is free and not signed by Apple (that needs a paid certificate), so macOS asks you once to allow it. It runs only on your computer and sends nothing anywhere.</p>
+      <ol class="first-run-steps">
+        <li>Open the downloaded <code>.dmg</code> and drag <strong>Cuadrilo Demo App</strong> to <strong>Applications</strong>.</li>
+        <li>Open the app. macOS says it could not verify it: click <strong>Done</strong> (not “Move to Trash”).</li>
+        <li>Open <strong>System Settings → Privacy &amp; Security</strong>, scroll down and click <strong>Open Anyway</strong>, then confirm with your password.</li>
+      </ol>
+      <p class="hint">From then on it opens like any other app.</p>
+    </div>
+    <div class="first-run-os" data-for="win">
+      <h2>One extra step the first time on Windows</h2>
+      <p class="why">The demo is free and not signed with a paid certificate, so Windows SmartScreen may warn about an unknown app. It runs only on your computer and sends nothing anywhere.</p>
+      <ol class="first-run-steps">
+        <li>Open the downloaded <code>.exe</code>.</li>
+        <li>If you see “Windows protected your PC”, click <strong>More info</strong>, then <strong>Run anyway</strong>.</li>
+        <li class="setup-only">It installs for you only, without an administrator, and opens. A shortcut is on the desktop.</li>
+        <li class="portable-only">The portable version runs as it is, nothing is installed.</li>
+      </ol>
+    </div>
+    <div class="dialog-actions">
+      <a class="btn primary" id="first-run-download" href="#demo">Got it, download</a>
+      <button type="button" class="btn" id="first-run-cancel">Cancel</button>
+    </div>
+    <p class="hint again">The download did not start? <a id="first-run-again" href="#demo">Download again</a></p>
+  </dialog>
 
   <footer>
     <div class="wrap foot-inner">

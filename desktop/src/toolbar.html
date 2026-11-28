@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'" />
+    <title>Toolbar</title>
+    <!--
+      The demo's toolbar above the two halves (main.ts): one column over each half when both are shown, and a
+      second line for a question (reset) or a notice (update) when there is one; the main process makes the view
+      taller for it. It talks to the main process through window.demo (preload.ts).
+    -->
+    <style>
+      :root {
+        color-scheme: light;
+        font: 13px/1.2 -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        color: #212529;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        background: #dee2e6;
+        user-select: none;
+        -webkit-user-select: none;
+      }
+      .bar {
+        flex: none;
+        height: 44px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        column-gap: 2px;
+      }
+      .half {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 0 12px;
+        background: #f8f9fa;
+        min-width: 0;
+      }
+      /* One half on the whole width: the controls of both in one row. */
+      .bar.one {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 0 12px;
+        background: #f8f9fa;
+      }
+      .bar.one .half {
+        display: contents;
+      }
+      .prompt {
+        flex: 1;
+        display: none;
+        align-items: center;
+        gap: 10px;
+        padding: 0 12px;
+        border-top: 1px solid #dee2e6;
+        background: #e7f5ff;
+      }
+      .prompt.reset {
+        background: #fff5f5;
+      }
+      body.has-prompt .prompt {
+        display: flex;
+      }
+      .prompt-text {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .role {
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        font-size: 11px;
+        padding: 4px 8px;
+        border-radius: 999px;
+        white-space: nowrap;
+      }
+      .role.teacher {
+        background: #e7f5ff;
+        color: #1864ab;
+      }
+      .role.student {
+        background: #ebfbee;
+        color: #2b8a3e;
+      }
+      .spacer {
+        flex: 1;
+      }
+      .segmented {
+        display: inline-flex;
+        margin: 0;
+        padding: 0;
+        min-inline-size: 0;
+        border: 1px solid #ced4da;
+        border-radius: 6px;
+        overflow: hidden;
+      }
+      button,
+      select {
+        font: inherit;
+        color: inherit;
+        border: 1px solid #ced4da;
+        border-radius: 6px;
+        background: #fff;
+        padding: 5px 10px;
+        cursor: pointer;
+        white-space: nowrap;
+      }
+      .segmented button {
+        border: 0;
+        border-radius: 0;
+      }
+      .segmented button + button {
+        border-left: 1px solid #ced4da;
+      }
+      .segmented button[aria-pressed='true'] {
+        background: #228be6;
+        color: #fff;
+      }
+      button.danger {
+        background: #fa5252;
+        border-color: #fa5252;
+        color: #fff;
+      }
+      button:disabled,
+      select:disabled {
+        opacity: 0.55;
+        cursor: default;
+      }
+      label {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        white-space: nowrap;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="bar" id="bar">
+      <div class="half" id="teacher-half">
+        <span class="role teacher">Teacher</span>
+        <span class="spacer"></span>
+        <fieldset class="segmented" aria-label="Show">
+          <button type="button" data-layout="both">Both</button>
+          <button type="button" data-layout="teacher">Teacher</button>
+          <button type="button" data-layout="student">Student</button>
+        </fieldset>
+      </div>
+      <div class="half" id="student-half">
+        <span class="role student">Student</span>
+        <label>
+          Signed in as
+          <select id="student"></select>
+        </label>
+        <span class="spacer"></span>
+        <button type="button" id="reset" title="Start again from the demo lessons: every change is lost">Reset demo</button>
+      </div>
+    </div>
+    <div class="prompt" id="prompt" role="status">
+      <span class="prompt-text" id="prompt-text"></span>
+      <span class="spacer"></span>
+      <button type="button" class="danger" id="prompt-confirm">Reset</button>
+      <button type="button" id="prompt-close"></button>
+    </div>
+    <script>
+      // Plain script: window.demo comes from preload.ts.
+      var demo = window.demo;
+      var select = document.getElementById('student');
+      var reset = document.getElementById('reset');
+      var layoutButtons = document.querySelectorAll('[data-layout]');
+      var roleTeacher = document.querySelector('.role.teacher');
+      var roleStudent = document.querySelector('.role.student');
+      var bar = document.getElementById('bar');
+      var promptBox = document.getElementById('prompt');
+      var promptText = document.getElementById('prompt-text');
+      var promptConfirm = document.getElementById('prompt-confirm');
+      var promptClose = document.getElementById('prompt-close');
+
+      layoutButtons.forEach((button) => {
+        button.addEventListener('click', () => {
+          demo.setLayout(button.getAttribute('data-layout'));
+        });
+      });
+      select.addEventListener('change', () => {
+        demo.setStudent(select.value);
+      });
+      // Asked here, not in a native dialog (main.ts: one closes by itself when a page takes the focus).
+      reset.addEventListener('click', () => {
+        demo.setPrompt('reset');
+      });
+      promptConfirm.addEventListener('click', () => {
+        demo.reset();
+      });
+      promptClose.addEventListener('click', () => {
+        demo.setPrompt(null);
+      });
+
+      demo.onState((state) => {
+        bar.classList.toggle('one', state.layout !== 'both');
+        document.body.classList.toggle('has-prompt', state.prompt !== null);
+        promptBox.className = `prompt ${state.prompt || ''}`;
+        if (state.prompt === 'reset') {
+          promptText.textContent =
+            'Reset the demo? Every lesson, student, answer and file goes back to how the demo was at first: your changes are lost.';
+          promptConfirm.hidden = false;
+          promptClose.textContent = 'Cancel';
+        } else if (state.prompt === 'updated') {
+          promptText.textContent = `This is version ${state.version} of Cuadrilo Demo App, with its own demo lessons: the demo started again from them. What you did in an earlier version is not kept.`;
+          promptConfirm.hidden = true;
+          promptClose.textContent = 'OK';
+        }
+        promptText.title = promptText.textContent;
+        promptConfirm.disabled = state.busy;
+        roleTeacher.hidden = state.layout === 'student';
+        roleStudent.hidden = state.layout === 'teacher';
+        layoutButtons.forEach((button) => {
+          button.setAttribute('aria-pressed', String(button.getAttribute('data-layout') === state.layout));
+          button.disabled = state.busy;
+        });
+        if (select.options.length !== state.students.length) {
+          select.innerHTML = '';
+          state.students.forEach((login) => {
+            var option = document.createElement('option');
+            option.value = login;
+            option.textContent = login;
+            select.appendChild(option);
+          });
+        }
+        select.value = state.student;
+        select.disabled = state.busy;
+        reset.disabled = state.busy || state.prompt === 'reset';
+      });
+    </script>
+  </body>
+</html>

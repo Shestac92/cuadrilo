@@ -19,6 +19,8 @@ cp .env.example .env
 | `SHARE_HOSTS` | domains `npm run share` answers to, comma-separated | only `localhost` |
 | `TRANSLATION_LANG` | the students' language; picks `dictionaries/<APP_LANG>-<TRANSLATION_LANG>.db`; not set means no translator | not set |
 | `DATA_DIR` | where `lessons.db` and `media/` live | `./data` |
+| `HOST` | the interface the backend listens on (the desktop app: `127.0.0.1`) | all |
+| `CLIENT_DIR` | the built client the backend serves as well, for the desktop app only (on a server Caddy serves it) | not set: API only |
 
 Backend and Vite config both read the file; a variable set in the shell wins (`PORT=9000 npm run dev`). Restart after editing. The client-side values (`APP_LANG`, `PLATFORM_NAME`, `FAVICON`, privacy values) need a rebuild: `npm run build -w client`. Tests do not read `.env`.
 
@@ -37,5 +39,6 @@ The look (colours, radii, fonts) is one **theme** for everyone, chosen by any te
 
 - **Ids:** `shared/src/themes.ts` (`THEME_IDS`, `DEFAULT_THEME`); definitions: `client/src/themes/` (a Mantine theme plus CSS variables if needed). A new theme is an id, a file and a line in its `index.ts`.
 - **Client:** `PlatformThemeProvider` uses the theme from `/api/config`, and until it arrives the one this browser saw last (localStorage `platform-theme`). "Apariencia" in the user menu sets the theme (teachers) and the user's own mode (light, dark, system). A theme with `lightOnly: true` (`blush`) has no dark variant.
+- **A change reaches everyone at once:** after `PATCH /api/settings` the server sends the new settings to every open page (event `settings` on `/live`), and the theme changes there without a reload; a page that was disconnected asks `/api/config` again when it reconnects.
 - **Fonts:** system stacks only (`client/src/themes/fonts.ts`): nothing is downloaded.
 - **Colours:** screens use the theme's primary colour (`var(--mantine-primary-color-*)`, never `teal`). Colours with a meaning (red for errors, green for "accepted", text colours) stay fixed.

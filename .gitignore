@@ -1,5 +1,7 @@
 node_modules/
 dist/
+# What the desktop app is built from (npm run build -w desktop).
+desktop/build/
 *.tsbuildinfo
 
 # Settings of this installation (copy .env.example).

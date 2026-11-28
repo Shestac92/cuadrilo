@@ -1,6 +1,6 @@
 {
   "name": "server",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "description": "The backend: Express 5 API, socket.io live class, SQLite storage, MCP server for AI assistants",
   "homepage": "https://github.com/Shestac92/cuadrilo#readme",
@@ -24,7 +24,7 @@
     "test:api": "tsx --test \"test/api/*.test.ts\""
   },
   "dependencies": {
-    "@cuadrilo/shared": "0.1.0",
+    "@cuadrilo/shared": "0.2.0",
     "@modelcontextprotocol/sdk": "1.32.1",
     "express": "5.3.0",
     "helmet": "8.3.0",

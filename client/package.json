@@ -1,6 +1,6 @@
 {
   "name": "client",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "description": "The web app: React 19 + Mantine lesson player and editor",
   "homepage": "https://github.com/Shestac92/cuadrilo#readme",
@@ -26,7 +26,7 @@
     "@dnd-kit/core": "6.3.1",
     "@dnd-kit/sortable": "10.0.0",
     "@dnd-kit/utilities": "3.2.2",
-    "@cuadrilo/shared": "0.1.0",
+    "@cuadrilo/shared": "0.2.0",
     "@mantine/core": "9.7.2",
     "@mantine/hooks": "9.7.2",
     "@tabler/icons-react": "3.49.0",

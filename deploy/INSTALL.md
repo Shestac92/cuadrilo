@@ -12,7 +12,7 @@ CAPITALS with your own values, paste it.
 | `YOUR_DOMAIN` | your domain, without `https://` (for example `classes.example.com`) |
 | `SERVER_IP` | the public IP address of the server |
 | `Shestac92/cuadrilo` | the address of the repository on GitHub |
-| `VERSION` | a release of the platform (for example `v0.1.0`), or `main` for the latest code |
+| `VERSION` | a release of the platform (for example `v0.2.0`), or `main` for the latest code |
 
 ## 0. What you need
 
